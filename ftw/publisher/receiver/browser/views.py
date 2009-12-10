@@ -195,7 +195,7 @@ class ReceiveObject(BrowserView):
         # set object position
         self.updateObjectPosition(object, metadata)
         # finalize and reindex
-        svn ci object.processForm()
+        object.processForm()
         object.reindexObject()
 
         # return the appropriate CommunicationState
