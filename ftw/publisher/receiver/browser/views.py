@@ -169,6 +169,9 @@ class ReceiveObject(BrowserView):
             #object.processForm()
             new_object = True
 
+        # finalize
+        object.processForm()
+        
         # set review_state
         pm = self.context.portal_membership
         current_user = pm.getAuthenticatedMember().getId()
@@ -194,8 +197,7 @@ class ReceiveObject(BrowserView):
         
         # set object position
         self.updateObjectPosition(object, metadata)
-        # finalize and reindex
-        object.processForm()
+        # reindex
         object.reindexObject()
 
         # return the appropriate CommunicationState
