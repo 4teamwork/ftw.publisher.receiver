@@ -166,21 +166,9 @@ class ReceiveObject(BrowserView):
                     metadata['id'],
             ))
             object._setUID(metadata['UID'])
-            object.processForm()
+            #object.processForm()
             new_object = True
-        
-        # updates all data with the registered adapters for IDataCollector 
-        adapters = getAdapters((object,),IDataCollector)
-        for name,adapter in adapters:
-            data = self.decoder.unserializeFields(object,name) 
-            adapter.setData(data[name],metadata)
-        
-        # set object position
-        self.updateObjectPosition(object, metadata)
-        # finalize and reindex
-        object.processForm()
-        object.reindexObject()
-        
+
         # set review_state
         pm = self.context.portal_membership
         current_user = pm.getAuthenticatedMember().getId()
@@ -197,8 +185,19 @@ class ReceiveObject(BrowserView):
                                          'comments': comment,})
         wf = wt.getWorkflowById(wf_id)
         wf.updateRoleMappingsFor(object)
-        object.reindexObject(idxs=['allowRolesAndUsers', 'review_state'])  
         
+        # updates all data with the registered adapters for IDataCollector 
+        adapters = getAdapters((object,),IDataCollector)
+        for name,adapter in adapters:
+            data = self.decoder.unserializeFields(object,name) 
+            adapter.setData(data[name],metadata)
+        
+        # set object position
+        self.updateObjectPosition(object, metadata)
+        # finalize and reindex
+        svn ci object.processForm()
+        object.reindexObject()
+
         # return the appropriate CommunicationState
         if new_object:
             return states.ObjectCreatedState()
