@@ -101,6 +101,9 @@ class ReceiveObject(BrowserView):
             # separatly to dataCollector adapters
             metadata = self.data['metadata']
             return self.pushAction(metadata, self.data)
+        elif action == 'move':
+            metadata = self.data['metadata']
+            return self.moveAction(metadata,self.data)
         elif action=='delete':
             metadata = self.data['metadata']
             return self.deleteAction(metadata)
@@ -115,7 +118,7 @@ class ReceiveObject(BrowserView):
         Returns the action name of the current request.
         
         @rtype:     string
-        @return:    action name ('push' or 'delete')
+        @return:    action name ('push', 'move' or 'delete')
         """
         return self.data['metadata']['action']
     
@@ -205,6 +208,52 @@ class ReceiveObject(BrowserView):
             return states.ObjectCreatedState()
         else:
             return states.ObjectUpdatedState()
+
+
+    def moveAction(self, metadata, data):
+        """
+        Move or rename object by the given data.
+        'move' contains the following keys
+         - newName
+         - newParent
+         - oldName
+         - oldParent
+         - newTitle
+
+        @param metadata:        metadata dictionary containing UID, portal_type,
+                                action, physicalPath and sibling_positions
+        @param data
+        @type data              dict
+        @type metadata:         dict
+        @return:                CommunicationState instance
+        @rtype:                 ftw.publisher.core.states.CommunicationState
+        """
+        # find the object
+        object = self._getObjectByUID(metadata['UID'])
+        if not object:
+            raise states.ObjectNotFoundError()
+
+        move_data = data.has_key('move') and data['move'] or None
+        if not move_data:
+            return states.UnexpectedError() 
+
+        obj_path = '/'.join(object.getPhysicalPath())
+
+        # check if object has moved by compairing the parents
+        if move_data['newParent'] == move_data['oldParent']:
+            # rename the object
+            putils = object.plone_utils
+            paths = [obj_path,]
+            new_ids = [move_data['newName'],]
+            new_titles = [move_data['newTitle'],]
+            import pdb; pdb.set_trace( )
+            success, failure = putils.renameObjectsByPaths(paths, new_ids, new_titles)
+            if failure:
+                return states.ObjectMovedError(u'Object on %s could not be renamed/moved' % obj_path)
+
+
+        # return a ObjectMovedState() instance
+        return states.ObjectMovedState()
 
     def deleteAction(self, metadata):
         """
