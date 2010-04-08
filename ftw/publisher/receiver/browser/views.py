@@ -246,7 +246,6 @@ class ReceiveObject(BrowserView):
             paths = [obj_path,]
             new_ids = [move_data['newName'],]
             new_titles = [move_data['newTitle'],]
-            import pdb; pdb.set_trace( )
             success, failure = putils.renameObjectsByPaths(paths, new_ids, new_titles)
             if failure:
                 return states.ObjectMovedError(u'Object on %s could not be renamed/moved' % obj_path)
