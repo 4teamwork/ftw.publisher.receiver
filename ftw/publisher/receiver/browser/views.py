@@ -245,10 +245,11 @@ class ReceiveObject(BrowserView):
             putils = object.plone_utils
             paths = [obj_path,]
             new_ids = [move_data['newName'],]
-            new_titles = [move_data['newTitle'],]
+            new_titles = [move_data['newTitle'].encode('utf-8'),]
             success, failure = putils.renameObjectsByPaths(paths, new_ids, new_titles)
             if failure:
-                return states.ObjectMovedError(u'Object on %s could not be renamed/moved' % obj_path)
+                return states.ObjectMovedError(u'Object on %s could not be renamed/moved (%s)' % (obj_path,
+                                                                                                 failure.get(obj_path).__str__()))
 
         else:
             #object has been moved
