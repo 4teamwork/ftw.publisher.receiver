@@ -3,6 +3,6 @@ Changelog
 
 1.0 - Unreleased
 ----------------
-
+* implement rename and cut/paste support [mathias.leimgruber]
 * Initial release
 

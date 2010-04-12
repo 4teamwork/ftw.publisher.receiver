@@ -250,6 +250,13 @@ class ReceiveObject(BrowserView):
             if failure:
                 return states.ObjectMovedError(u'Object on %s could not be renamed/moved' % obj_path)
 
+        else:
+            #object has been moved
+            old_parent = object.restrictedTraverse(move_data['oldParent'])
+            new_parent = object.restrictedTraverse(move_data['newParent'])
+            cutted = old_parent.manage_cutObjects(object.id)
+            new_parent.manage_pasteObjects(cutted)
+
 
         # return a ObjectMovedState() instance
         return states.ObjectMovedState()
