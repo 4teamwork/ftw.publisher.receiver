@@ -211,7 +211,7 @@ class ReceiveObject(BrowserView):
         # set object position
         if not is_root:self.updateObjectPosition(object, metadata)
         # reindex
-        if not ist_root:object.reindexObject()
+        if not is_root:object.reindexObject()
 
         # return the appropriate CommunicationState
         if new_object:
