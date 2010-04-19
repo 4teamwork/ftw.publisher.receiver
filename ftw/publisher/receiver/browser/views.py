@@ -360,6 +360,8 @@ class ReceiveObject(BrowserView):
         portalObject = self.context.portal_url.getPortalObject()
         portalPath = '/'.join(portalObject.getPhysicalPath())
         # concatinate with portalPath with relativePath
+        # handle plone root
+        if relativePath == '/':return portalPath
         return portalPath + relativePath
 
     def updateObjectPosition(self, object, metadata):
