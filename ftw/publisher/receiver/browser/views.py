@@ -140,7 +140,13 @@ class ReceiveObject(BrowserView):
         # do we have to update or create? does the object already exist?
         # ... try it with the uid
         absPath = self._getAbsolutePath(metadata['physicalPath'])
-        object = self._getObjectByUID(metadata['UID'])
+        # XXX: check first if we are on a plone root, use absPath
+        # fast fix -  needs to be refactered 
+        traversed_object = self.context.restrictedTraverse(absPath)
+        if not IPloneSiteRoot.providedBy(traversed_object):
+            object = self._getObjectByUID(metadata['UID'])
+        else: 
+            object = traversed_object
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
