@@ -140,6 +140,7 @@ class ReceiveObject(BrowserView):
         # do we have to update or create? does the object already exist?
         # ... try it with the uid
         absPath = self._getAbsolutePath(metadata['physicalPath'])
+        is_root = False
         # XXX: check first if we are on a plone root, use absPath
         # fast fix -  needs to be refactered 
         traversed_object = self.context.restrictedTraverse(absPath)
@@ -147,6 +148,8 @@ class ReceiveObject(BrowserView):
             object = self._getObjectByUID(metadata['UID'])
         else: 
             object = traversed_object
+            is_root = True
+            
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
@@ -179,24 +182,25 @@ class ReceiveObject(BrowserView):
             new_object = True
 
         # finalize
-        object.processForm()
+        if not is_root:object.processForm()
         
-        # set review_state
-        pm = self.context.portal_membership
-        current_user = pm.getAuthenticatedMember().getId()
-        wt = self.context.portal_workflow
-        wf_ids = wt.getChainFor(object)
-        if wf_ids:
-            wf_id = wf_ids[0]
-        state = metadata['review_state']
-        comment = 'state set to: %s' % state
-        wt.setStatusOf(wf_id, object, {'review_state': state,
-                                         'action' : state, 
-                                         'actor': current_user,
-                                         'time': DateTime(),
-                                         'comments': comment,})
-        wf = wt.getWorkflowById(wf_id)
-        wf.updateRoleMappingsFor(object)
+        if not is_root:
+            # set review_state
+            pm = self.context.portal_membership
+            current_user = pm.getAuthenticatedMember().getId()
+            wt = self.context.portal_workflow
+            wf_ids = wt.getChainFor(object)
+            if wf_ids:
+                wf_id = wf_ids[0]
+            state = metadata['review_state']
+            comment = 'state set to: %s' % state
+            wt.setStatusOf(wf_id, object, {'review_state': state,
+                                             'action' : state, 
+                                             'actor': current_user,
+                                             'time': DateTime(),
+                                             'comments': comment,})
+            wf = wt.getWorkflowById(wf_id)
+            wf.updateRoleMappingsFor(object)
         
         # updates all data with the registered adapters for IDataCollector 
         adapters = getAdapters((object,),IDataCollector)
@@ -205,9 +209,9 @@ class ReceiveObject(BrowserView):
             adapter.setData(data[name],metadata)
         
         # set object position
-        self.updateObjectPosition(object, metadata)
+        if not is_root:self.updateObjectPosition(object, metadata)
         # reindex
-        object.reindexObject()
+        if not ist_root:object.reindexObject()
 
         # return the appropriate CommunicationState
         if new_object:
