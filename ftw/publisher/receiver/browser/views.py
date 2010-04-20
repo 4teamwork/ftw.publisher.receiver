@@ -141,6 +141,7 @@ class ReceiveObject(BrowserView):
         # ... try it with the uid
         absPath = self._getAbsolutePath(metadata['physicalPath'])
         is_root = False
+        traversed_object = None
         # XXX: check first if we are on a plone root, use absPath
         # fast fix -  needs to be refactered 
         
