@@ -145,7 +145,6 @@ class Decoder(object):
             return self.data
         
         schema = self.getSchema(object)
-        import pdb; pdb.set_trace( )
         fields = []
         
         if schema is not None:
