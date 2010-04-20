@@ -143,13 +143,19 @@ class ReceiveObject(BrowserView):
         is_root = False
         # XXX: check first if we are on a plone root, use absPath
         # fast fix -  needs to be refactered 
-        traversed_object = self.context.restrictedTraverse(absPath)
-        if not IPloneSiteRoot.providedBy(traversed_object):
-            object = self._getObjectByUID(metadata['UID'])
-        else: 
-            object = traversed_object
+        
+        object = self._getObjectByUID(metadata['UID'])
+        if not object:
+            try:
+                traversed_object = self.context.restrictedTraverse(absPath)
+                object = traversed_object
+            except AttributeError:
+                traversed_object = None            
+        
+        if traversed_object and IPloneSiteRoot.providedBy(traversed_object):
             is_root = True
-            
+        
+        
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
