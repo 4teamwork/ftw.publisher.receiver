@@ -118,13 +118,13 @@ class Decoder(object):
                     if subkey not in self.data[key]:
                         raise states.PartialError('Missing "%s.%s"' % (key, subkey))
 
-    def getSchema(self):
+    def getSchema(self, object):
         """
         Returns the Schema of the portal_type defined in the metadata.
         @return:        Archetypes Schema object
         @rtype:         Schema
         """
-        if not IPloneSiteRoot.providedBy(self.context):
+        if not IPloneSiteRoot.providedBy(object):
             typename = self.data['metadata']['portal_type']
             types = self.context.archetype_tool.listRegisteredTypes()
             typeclass = filter(lambda x:x['portal_type']==typename, types)[0]['klass']
@@ -144,7 +144,8 @@ class Decoder(object):
         if not isinstance(self.data[jsonkey],dict):
             return self.data
         
-        schema = self.getSchema()
+        schema = self.getSchema(object)
+        import pdb; pdb.set_trace( )
         fields = []
         
         if schema is not None:
