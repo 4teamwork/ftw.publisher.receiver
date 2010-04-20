@@ -32,6 +32,8 @@ import base64
 from Products.Archetypes.Field import FileField
 from Products.Archetypes.Field import ImageField
 from Products.Archetypes.Field import ReferenceField
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+
 
 # ftw.publisher imports
 from ftw.publisher.core import states
@@ -122,10 +124,13 @@ class Decoder(object):
         @return:        Archetypes Schema object
         @rtype:         Schema
         """
-        typename = self.data['metadata']['portal_type']
-        types = self.context.archetype_tool.listRegisteredTypes()
-        typeclass = filter(lambda x:x['portal_type']==typename, types)[0]['klass']
-        return typeclass.schema
+        if not IPloneSiteRoot.providedBy(self.context):
+            typename = self.data['metadata']['portal_type']
+            types = self.context.archetype_tool.listRegisteredTypes()
+            typeclass = filter(lambda x:x['portal_type']==typename, types)[0]['klass']
+            return typeclass.schema
+        else:
+            return None
 
     def unserializeFields(self,object, jsonkey):
         """
@@ -140,8 +145,10 @@ class Decoder(object):
             return self.data
         
         schema = self.getSchema()
+        fields = []
         
-        fields = schema.fields()
+        if schema is not None:
+            fields = schema.fields()
         if HAS_AT_SCHEMAEXTENDER and queryAdapter(object, ISchemaExtender):
             fields += ISchemaExtender(object).getFields()
         
