@@ -200,14 +200,15 @@ class ReceiveObject(BrowserView):
             if wf_ids:
                 wf_id = wf_ids[0]
             state = metadata['review_state']
-            comment = 'state set to: %s' % state
-            wt.setStatusOf(wf_id, object, {'review_state': state,
-                                             'action' : state, 
-                                             'actor': current_user,
-                                             'time': DateTime(),
-                                             'comments': comment,})
-            wf = wt.getWorkflowById(wf_id)
-            wf.updateRoleMappingsFor(object)
+            if state:
+                comment = 'state set to: %s' % state
+                wt.setStatusOf(wf_id, object, {'review_state': state,
+                                                 'action' : state, 
+                                                 'actor': current_user,
+                                                 'time': DateTime(),
+                                                 'comments': comment,})
+                wf = wt.getWorkflowById(wf_id)
+                wf.updateRoleMappingsFor(object)
         
         # updates all data with the registered adapters for IDataCollector 
         adapters = getAdapters((object,),IDataCollector)
