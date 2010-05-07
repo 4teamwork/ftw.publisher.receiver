@@ -1,8 +1,12 @@
 Changelog
 =========
 
-1.0 - Unreleased
-----------------
+
+1.0b1
+-----
+
+* Added z3c.autoinclude for zcml-dependencies
+  [07.05.2010, jbaumann]
+
 * implement rename and cut/paste support [mathias.leimgruber]
-* Initial release
 
