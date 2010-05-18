@@ -141,22 +141,13 @@ class ReceiveObject(BrowserView):
         # ... try it with the uid
         absPath = self._getAbsolutePath(metadata['physicalPath'])
         is_root = False
-        traversed_object = None
-        # XXX: check first if we are on a plone root, use absPath
-        # fast fix -  needs to be refactered 
         
         object = self._getObjectByUID(metadata['UID'])
-        if not object:
-            try:
-                traversed_object = self.context.restrictedTraverse(absPath)
-                object = traversed_object
-            except AttributeError:
-                traversed_object = None            
-        
-        if traversed_object and IPloneSiteRoot.providedBy(traversed_object):
+        if metadata['portal_type'] == 'Plone Site':
+            object = self.context.portal_url.getPortalObject()
             is_root = True
         
-        
+
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
