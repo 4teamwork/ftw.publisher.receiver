@@ -125,10 +125,15 @@ class Decoder(object):
         @rtype:         Schema
         """
         if not IPloneSiteRoot.providedBy(object):
-            typename = self.data['metadata']['portal_type']
-            types = self.context.archetype_tool.listRegisteredTypes()
-            typeclass = filter(lambda x:x['portal_type']==typename, types)[0]['klass']
-            return typeclass.schema
+            schema_path = self.data['metadata']['schema_path']
+            path_parts = schema_path.split('.')
+            module_path = '.'.join(path_parts[:-2])
+            class_name = path_parts[-2]
+            var_name = path_parts[-1]
+            klass = getattr(__import__(module_path, globals(),
+                                       locals(), class_name), class_name)
+            schema = getattr(klass, var_name)
+            return schema
         else:
             return None
 
@@ -151,7 +156,7 @@ class Decoder(object):
             fields = schema.fields()
         if HAS_AT_SCHEMAEXTENDER and queryAdapter(object, ISchemaExtender):
             fields += ISchemaExtender(object).getFields()
-        
+
         for field in fields:
             name = field.getName()
             if name not in self.data[jsonkey].keys():
@@ -182,7 +187,7 @@ class Decoder(object):
                                 self.logger.warn("The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),uid))
                     self.data[jsonkey][name] = cleaned
                 else:
-                    cleaned = ''
+                    cleaned = None
                     obj = self.context.reference_catalog.lookupObject(self.data[jsonkey][name])
                     if obj:
                         cleaned = self.data[jsonkey][name]

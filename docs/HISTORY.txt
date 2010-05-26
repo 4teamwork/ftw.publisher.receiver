@@ -5,6 +5,9 @@ Changelog
 1.0b1
 -----
 
+* Fixed schema bug
+  [26.05.2010, jbaumann]
+
 * Fixed traversing bug / support for plone site root
   [11.05.2010, jbaumann]
 
