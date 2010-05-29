@@ -188,10 +188,9 @@ class ReceiveObject(BrowserView):
             current_user = pm.getAuthenticatedMember().getId()
             wt = self.context.portal_workflow
             wf_ids = wt.getChainFor(object)
-            if wf_ids:
-                wf_id = wf_ids[0]
             state = metadata['review_state']
-            if state:
+            if state and wf_ids:
+                wf_id = wf_ids[0]
                 comment = 'state set to: %s' % state
                 wt.setStatusOf(wf_id, object, {'review_state': state,
                                                  'action' : state, 
