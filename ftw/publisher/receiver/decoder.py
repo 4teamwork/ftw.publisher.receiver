@@ -198,11 +198,11 @@ class Decoder(object):
                     
             # ImageField: treat empty files special
             if isinstance(field, ImageField):
-                if len(self.data[jsonkey][name])==0:
+                if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
                     self.data[jsonkey][name] = 'DELETE_IMAGE'
             # FileField (direct): treat empty files special
             if field.__class__==FileField:
-                if len(self.data[jsonkey][name])==0:
+                if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
                     self.data[jsonkey][name] = 'DELETE_FILE'
         
         return self.data
