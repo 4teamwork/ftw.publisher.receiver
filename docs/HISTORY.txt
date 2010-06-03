@@ -5,6 +5,10 @@ Changelog
 1.0b1
 -----
 
+* Issue #977 Integration: Probleme mit dem Publizieren von Objekten
+  https://extranet.4teamwork.ch/support/zug/maintlog/977/view
+  [03.06.2010, jbaumann]
+
 * Fixed schema bug
   [26.05.2010, jbaumann]
 

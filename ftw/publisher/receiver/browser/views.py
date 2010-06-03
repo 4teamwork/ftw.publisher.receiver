@@ -151,8 +151,13 @@ class ReceiveObject(BrowserView):
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
-                raise states.UnexpectedError('UID already used or object in ' +\
-                        'wrong place')
+                # wrong path -> try to get it by path
+                # alias patch because thomas uses to index multiple objects with
+                # different paths and the same UID in the reference catalog -.-
+                object = self._getObjectByPath(absPath)
+                if object.UID() != metadata['UID']:
+                    raise states.UnexpectedError('UID already used or object in ' +\
+                                                     'wrong place')
         # create the object if its not existing ...
         new_object = False
         if not object:
