@@ -5,6 +5,9 @@ Changelog
 1.0b1
 -----
 
+* Fixed encoding problem: generally encoding anything received with utf8
+  [04.06.2010, jbaumann]
+
 * Issue #977 Integration: Probleme mit dem Publizieren von Objekten
   https://extranet.4teamwork.ch/support/zug/maintlog/977/view
   [03.06.2010, jbaumann]

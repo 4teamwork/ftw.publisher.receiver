@@ -38,6 +38,7 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 # ftw.publisher imports
 from ftw.publisher.core import states
 from ftw.publisher.receiver import getLogger
+from ftw.publisher.receiver.utils import recursive_encode
 
 # zope imports
 from zope.component import queryAdapter
@@ -91,6 +92,7 @@ class Decoder(object):
             data = simplejson.loads(jsondata)
         except Exception, e:
             raise states.DecodeError(str(e))
+        data = recursive_encode(data, enc='utf8')
         return data
 
     def validate(self):
