@@ -92,7 +92,7 @@ class Decoder(object):
             data = simplejson.loads(jsondata)
         except Exception, e:
             raise states.DecodeError(str(e))
-        data = recursive_encode(data, enc='utf8')
+        data = recursive_encode(data, enc=self.context.getCharset())
         return data
 
     def validate(self):
