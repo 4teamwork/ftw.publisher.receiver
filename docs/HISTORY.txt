@@ -5,6 +5,10 @@ Changelog
 1.0b1
 -----
 
+* The modification date is now re-set. The modification date of the parent object
+  will not change.
+  [09.06.2010, jbaumann]
+
 * Fixed encoding problem: generally encoding anything received with utf8
   [04.06.2010, jbaumann]
 

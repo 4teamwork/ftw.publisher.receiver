@@ -147,7 +147,6 @@ class ReceiveObject(BrowserView):
             object = self.context.portal_url.getPortalObject()
             is_root = True
 
-
         if object:
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath())!=absPath:
@@ -158,6 +157,9 @@ class ReceiveObject(BrowserView):
                 if not object or object.UID() != metadata['UID']:
                     raise states.UnexpectedError('UID already used or object in ' +\
                                                      'wrong place')
+
+        parent_modified_date = None
+
         # create the object if its not existing ...
         new_object = False
         if not object:
@@ -168,6 +170,10 @@ class ReceiveObject(BrowserView):
                 )
             # ... find container
             container = self._findContainerObjectByPath(absPath)
+            try:
+                parent_modified_date = container.modified()
+            except AttributeError:
+                pass
             if not container:
                 raise states.ErrorState('Could not find container of %s' %
                                         absPath)
@@ -183,6 +189,11 @@ class ReceiveObject(BrowserView):
             object._setUID(metadata['UID'])
             #object.processForm()
             new_object = True
+        else:
+            try:
+                parent_modified_date = object.aq_inner.aq_parent.modified()
+            except AttributeError:
+                pass
 
         # finalize
         if not is_root:object.processForm()
@@ -213,14 +224,31 @@ class ReceiveObject(BrowserView):
 
         # set object position
         if not is_root:self.updateObjectPosition(object, metadata)
+
         # reindex
-        if not is_root:object.reindexObject()
+        if not is_root: object.reindexObject()
+
+        catalog_tool = self.context.portal_catalog
+        # re-set the modification date - this must be the last modifying access
+        if metadata['modified']:
+            modifiedDate = DateTime(metadata['modified'])
+            object.setModificationDate(modifiedDate)
+            if not is_root:
+                catalog_tool.catalog_object(object,
+                                            '/'.join(object.getPhysicalPath()))
+
+        if parent_modified_date:
+            parent = object.aq_inner.aq_parent
+            parent.setModificationDate(modifiedDate)
+            catalog_tool.catalog_object(object,
+                                        '/'.join(object.getPhysicalPath()))
 
         # return the appropriate CommunicationState
         if new_object:
             return states.ObjectCreatedState()
         else:
             return states.ObjectUpdatedState()
+
 
 
     def moveAction(self, metadata, data):
