@@ -155,7 +155,7 @@ class ReceiveObject(BrowserView):
                 # alias patch because thomas uses to index multiple objects with
                 # different paths and the same UID in the reference catalog -.-
                 object = self._getObjectByPath(absPath)
-                if object.UID() != metadata['UID']:
+                if not object or object.UID() != metadata['UID']:
                     raise states.UnexpectedError('UID already used or object in ' +\
                                                      'wrong place')
         # create the object if its not existing ...
