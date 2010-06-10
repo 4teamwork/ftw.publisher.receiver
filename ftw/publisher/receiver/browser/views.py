@@ -239,7 +239,7 @@ class ReceiveObject(BrowserView):
 
         if parent_modified_date:
             parent = object.aq_inner.aq_parent
-            parent.setModificationDate(modifiedDate)
+            parent.setModificationDate(parent_modified_date)
             catalog_tool.catalog_object(object,
                                         '/'.join(object.getPhysicalPath()))
 
