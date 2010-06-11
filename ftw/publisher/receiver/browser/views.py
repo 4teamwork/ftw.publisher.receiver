@@ -230,7 +230,7 @@ class ReceiveObject(BrowserView):
 
         catalog_tool = self.context.portal_catalog
         # re-set the modification date - this must be the last modifying access
-        if metadata['modified']:
+        if metadata.get('modified'):
             modifiedDate = DateTime(metadata['modified'])
             object.setModificationDate(modifiedDate)
             if not is_root:
