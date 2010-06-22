@@ -294,8 +294,9 @@ class ReceiveObject(BrowserView):
 
         else:
             #object has been moved
-            old_parent = object.restrictedTraverse(move_data['oldParent'])
-            new_parent = object.restrictedTraverse(move_data['newParent'])
+            portal_path = '/'.join(self.context.portal_url.getPortalObject().getPhysicalPath())
+            old_parent = object.restrictedTraverse(portal_path + move_data['oldParent'])
+            new_parent = object.restrictedTraverse(portal_path + move_data['newParent'])
             cutted = old_parent.manage_cutObjects(object.id)
             new_parent.manage_pasteObjects(cutted)
 
