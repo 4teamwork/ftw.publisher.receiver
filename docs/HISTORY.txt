@@ -5,6 +5,9 @@ Changelog
 1.0b1
 -----
 
+* Fixed fixed namespace_packages in setup.py
+  [22.06.2010, jbaumann]
+
 * The modification date is now re-set. The modification date of the parent object
   will not change.
   [09.06.2010, jbaumann]

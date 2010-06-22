@@ -21,7 +21,7 @@ setup(name='ftw.publisher.receiver',
       url='http://psc.4teamwork.ch/4teamwork/ftw/ftw.publisher.receiver/',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['ftw'],
+      namespace_packages=['ftw', 'ftw.publisher'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
