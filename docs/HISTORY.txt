@@ -5,6 +5,9 @@ Changelog
 1.0b1
 -----
 
+* Added string encoding / decoding methods which work with json
+  [24.06.2010, jbaumann]
+
 * Issue #150 publisher: Move-Jobs funktionieren nicht
   https://extranet.4teamwork.ch/projects/integration-zug.ch-izug/tracker-integration-zug.ch-izug/150/
   [22.06.2010, jbaumann]
