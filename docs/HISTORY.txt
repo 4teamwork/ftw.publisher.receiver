@@ -4,6 +4,12 @@ Changelog
 
 1.0b1
 -----
+* Implemented AfterCreatedEvent and AfterUpdatedEvent
+  [28.06.2010, mathias.leimgruber]
+
+* Implemented PloneFormGen Creation - remove all auto generated files after formgen creation
+  [28.06.2010, mathias.leimgruber]
+ 
 
 * Added string encoding / decoding methods which work with json
   [24.06.2010, jbaumann]

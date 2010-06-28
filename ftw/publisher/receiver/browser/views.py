@@ -30,6 +30,7 @@ import traceback, sys, os.path
 # zope imports
 from Products.Five import BrowserView
 from zope.component import getAdapters
+from zope import event
 
 # plone imports
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -39,6 +40,7 @@ from ftw.publisher.receiver import decoder
 from ftw.publisher.receiver import getLogger
 from ftw.publisher.core import states, communication
 from ftw.publisher.core.interfaces import IDataCollector
+from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
 
 from DateTime import DateTime
 
@@ -243,10 +245,12 @@ class ReceiveObject(BrowserView):
             catalog_tool.catalog_object(object,
                                         '/'.join(object.getPhysicalPath()))
 
-        # return the appropriate CommunicationState
+        # return the appropriate CommunicationState - notify events
         if new_object:
+            event.notify(AfterCreatedEvent(object))
             return states.ObjectCreatedState()
         else:
+            event.notify(AfterUpdatedEvent(object))
             return states.ObjectUpdatedState()
 
 
