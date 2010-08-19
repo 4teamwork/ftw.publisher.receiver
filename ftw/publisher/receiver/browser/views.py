@@ -151,14 +151,24 @@ class ReceiveObject(BrowserView):
 
         if object:
             # ... is it the right object?
-            if '/'.join(object.getPhysicalPath())!=absPath:
+            if '/'.join(object.getPhysicalPath()) != absPath:
                 # wrong path -> try to get it by path
                 # alias patch because thomas uses to index multiple objects with
                 # different paths and the same UID in the reference catalog -.-
+                obj1 = object
                 object = self._getObjectByPath(absPath)
-                if not object or object.UID() != metadata['UID']:
-                    raise states.UnexpectedError('UID already used or object in ' +\
-                                                     'wrong place')
+                if not object:
+                    raise states.UIDPathMismatchError({
+                            'problem': 'path wrong',
+                            'found path': '/'.join(obj1.getPhysicalPath()),
+                            'expected path': absPath,
+                            })
+                elif object.UID() != metadata['UID']:
+                    raise states.UIDPathMismatchError({
+                            'problem': 'UID wrong',
+                            'found uid': object.UID(),
+                            'expected uid': metadata['UID'],
+                            })
 
         parent_modified_date = None
 
@@ -276,11 +286,11 @@ class ReceiveObject(BrowserView):
         # find the object
         object = self._getObjectByUID(metadata['UID'])
         if not object:
-            raise states.ObjectNotFoundError()
+            raise states.ObjectNotFoundForMovingWarning()
 
         move_data = data.has_key('move') and data['move'] or None
         if not move_data:
-            return states.UnexpectedError()
+            return states.PartialError('Missing move part')
 
         obj_path = '/'.join(object.getPhysicalPath())
 
@@ -293,8 +303,10 @@ class ReceiveObject(BrowserView):
             new_titles = [move_data['newTitle'].encode('utf-8'),]
             success, failure = putils.renameObjectsByPaths(paths, new_ids, new_titles)
             if failure:
-                return states.ObjectMovedError(u'Object on %s could not be renamed/moved (%s)' % (obj_path,
-                                                                                                  failure.get(obj_path).__str__()))
+                return states.CouldNotMoveError(
+                    u'Object on %s could not be renamed/moved (%s)' % (
+                        obj_path,
+                        failure.get(obj_path).__str__()))
 
         else:
             #object has been moved
@@ -321,7 +333,7 @@ class ReceiveObject(BrowserView):
         # find the object
         object = self._getObjectByUID(metadata['UID'])
         if not object:
-            raise states.ObjectNotFoundError()
+            raise states.ObjectNotFoundForDeletingWarning()
         # delete the object
         self.logger.info('Removing object with UID %s' % metadata['UID'])
         container = object.aq_inner.aq_parent

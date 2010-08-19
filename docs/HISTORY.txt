@@ -4,6 +4,10 @@ Changelog
 
 1.0b1
 -----
+
+* Using new states from `ftw.publisher.core`.
+  [19.08.2010, jbaumann]
+
 * Implemented AfterCreatedEvent and AfterUpdatedEvent
   [28.06.2010, mathias.leimgruber]
 
