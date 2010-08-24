@@ -34,6 +34,8 @@ from zope import event
 
 # plone imports
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from ZODB.POSException import ConflictError
+from zope.publisher.interfaces import Retry
 
 # ftw.publisher imports
 from ftw.publisher.receiver import decoder
@@ -153,22 +155,62 @@ class ReceiveObject(BrowserView):
             # ... is it the right object?
             if '/'.join(object.getPhysicalPath()) != absPath:
                 # wrong path -> try to get it by path
-                # alias patch because thomas uses to index multiple objects with
-                # different paths and the same UID in the reference catalog -.-
+                # alias patch because thomas uses to index multiple objects
+                # with different paths and the same UID in the reference
+                # catalog -.-
                 obj1 = object
                 object = self._getObjectByPath(absPath)
+
                 if not object:
-                    raise states.UIDPathMismatchError({
+                    # the object is in a wrong place, so lets try to move it
+                    # where it belongs
+                    current_path = '/'.join(obj1.getPhysicalPath())
+                    expected_path = absPath
+
+                    # if we can't fix it we will raise the followin exception
+                    exception = states.UIDPathMismatchError({
                             'problem': 'path wrong',
-                            'found path': '/'.join(obj1.getPhysicalPath()),
-                            'expected path': absPath,
+                            'found path': current_path,
+                            'expected path': expected_path,
                             })
+
+                    # is it in the same place? -> rename
+                    if current_path.split('/')[:-1] == \
+                            expected_path.split('/')[:-1]:
+                        putils = obj1.plone_utils
+                        success, failure = putils.renameObjectsByPaths(
+                            (current_path,), (expected_path.split('/')[-1],),
+                            (obj1.Title(),))
+                        if failure:
+                            raise exception
+                        object = self._getObjectByPath(expected_path)
+
+                    # .. so its in another place (another parent) -> move
+                    else:
+                        old_parent = obj1.aq_inner.aq_parent
+                        try:
+                            new_parent = self.context.restrictedTraverse(
+                                '/'.join(expected_path.split('/')[:-1]))
+                        except AttributeError:
+                            raise exception
+                        try:
+                            cutted = old_parent.manage_cutObjects(obj1.id)
+                            new_parent.manage_pasteObjects(cutted)
+                        except (ConflictError, Retry):
+                            raise
+                        except:
+                            raise exception
+                        else:
+                            object = self._getObjectByPath(expected_path)
+
+
                 elif object.UID() != metadata['UID']:
                     raise states.UIDPathMismatchError({
                             'problem': 'UID wrong',
                             'found uid': object.UID(),
                             'expected uid': metadata['UID'],
                             })
+
 
         parent_modified_date = None
 

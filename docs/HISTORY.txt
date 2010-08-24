@@ -5,6 +5,10 @@ Changelog
 1.0b1
 -----
 
+* Fixed "path wrong" problem by trying to rename or move objects which
+  can't be pushed because the are in a wrong place.
+  [24.08.2010, jbaumann]
+
 * Using new states from `ftw.publisher.core`.
   [19.08.2010, jbaumann]
 
