@@ -25,7 +25,9 @@
 __author__ = """Jonas Baumann <j.baumann@4teamwork.ch>"""
 
 # python imports
-import traceback, sys, os.path
+import traceback
+import sys
+import os.path
 
 # zope imports
 from Products.Five import BrowserView
@@ -46,11 +48,12 @@ from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
 
 from DateTime import DateTime
 
+
 class ReceiveObject(BrowserView):
     """
-    The ReceiveObject View is called be ftw.publisher.sender module. It expects a
-    "jsondata"-paremeter in the request. It parses the jsondata and runs the
-    specified action.
+    The ReceiveObject View is called be ftw.publisher.sender module.
+    It expects a "jsondata"-paremeter in the request. It parses the jsondata
+    and runs the specified action.
     """
 
     def __call__(self, *args, **kwargs):
@@ -90,7 +93,8 @@ class ReceiveObject(BrowserView):
         """
         # get the jsondata
         jsondata = self.request.get('jsondata', None)
-        self.logger.info('Receiving request (data length: %i Byte)' % len(jsondata))
+        self.logger.info(
+            'Receiving request (data length: %i Byte)' % len(jsondata))
         if not jsondata:
             raise states.InvalidRequestError('No jsondata provided')
         # decode the jsondata to a python dictionary
@@ -107,7 +111,7 @@ class ReceiveObject(BrowserView):
             return self.pushAction(metadata, self.data)
         elif action == 'move':
             metadata = self.data['metadata']
-            return self.moveAction(metadata,self.data)
+            return self.moveAction(metadata, self.data)
         elif action=='delete':
             metadata = self.data['metadata']
             return self.deleteAction(metadata)
@@ -130,9 +134,10 @@ class ReceiveObject(BrowserView):
         """
         Is called if the action is "push". It creates or updates a object
         (identifiers in metadata) with the given fielddata.
-        For more infos about the provided data see ftw.publisher.sender.extrator
+        For more infos about the provided data see
+        ftw.publisher.sender.extrator
 
-        @param metadata:        metadata dictionary containing UID, portal_type,
+        @param metadata:        metadata dict containing UID, portal_type,
         action, physicalPath and sibling_positions
         @type metadata:         dict
         @param data:            dictionary contains the values collected by
@@ -179,8 +184,8 @@ class ReceiveObject(BrowserView):
                             expected_path.split('/')[:-1]:
                         putils = obj1.plone_utils
                         success, failure = putils.renameObjectsByPaths(
-                            (current_path,), (expected_path.split('/')[-1],),
-                            (obj1.Title(),))
+                            (current_path, ), (expected_path.split('/')[-1], ),
+                            (obj1.Title(), ))
                         if failure:
                             raise exception
                         object = self._getObjectByPath(expected_path)
@@ -250,7 +255,8 @@ class ReceiveObject(BrowserView):
                 pass
 
         # finalize
-        if not is_root:object.processForm()
+        if not is_root:
+            object.processForm()
 
         if not is_root:
             # set review_state
@@ -263,24 +269,26 @@ class ReceiveObject(BrowserView):
                 wf_id = wf_ids[0]
                 comment = 'state set to: %s' % state
                 wt.setStatusOf(wf_id, object, {'review_state': state,
-                                               'action' : state,
+                                               'action': state,
                                                'actor': current_user,
                                                'time': DateTime(),
-                                               'comments': comment,})
+                                               'comments': comment, })
                 wf = wt.getWorkflowById(wf_id)
                 wf.updateRoleMappingsFor(object)
 
         # updates all data with the registered adapters for IDataCollector
-        adapters = getAdapters((object,),IDataCollector)
-        for name,adapter in adapters:
-            data = self.decoder.unserializeFields(object,name)
-            adapter.setData(data[name],metadata)
+        adapters = getAdapters((object, ), IDataCollector)
+        for name, adapter in adapters:
+            data = self.decoder.unserializeFields(object, name)
+            adapter.setData(data[name], metadata)
 
         # set object position
-        if not is_root:self.updateObjectPosition(object, metadata)
+        if not is_root:
+            self.updateObjectPosition(object, metadata)
 
         # reindex
-        if not is_root: object.reindexObject()
+        if not is_root:
+            object.reindexObject()
 
         catalog_tool = self.context.portal_catalog
         # re-set the modification date - this must be the last modifying access
@@ -305,8 +313,6 @@ class ReceiveObject(BrowserView):
             event.notify(AfterUpdatedEvent(object))
             return states.ObjectUpdatedState()
 
-
-
     def moveAction(self, metadata, data):
         """
         Move or rename object by the given data.
@@ -317,8 +323,8 @@ class ReceiveObject(BrowserView):
         - oldParent
         - newTitle
 
-        @param metadata:        metadata dictionary containing UID, portal_type,
-        action, physicalPath and sibling_positions
+        @param metadata:        metadata dictionary containing UID,
+        portal_type, action, physicalPath and sibling_positions
         @param data
         @type data              dict
         @type metadata:         dict
@@ -330,20 +336,23 @@ class ReceiveObject(BrowserView):
         if not object:
             raise states.ObjectNotFoundForMovingWarning()
 
-        move_data = data.has_key('move') and data['move'] or None
+        move_data = 'move' in data and data['move'] or None
         if not move_data:
             return states.PartialError('Missing move part')
 
         obj_path = '/'.join(object.getPhysicalPath())
 
-        # check if object has moved by compairing the parents
+        # check if object has moved by comparing the parents
         if move_data['newParent'] == move_data['oldParent']:
             # rename the object
             putils = object.plone_utils
-            paths = [obj_path,]
-            new_ids = [move_data['newName'],]
-            new_titles = [move_data['newTitle'].encode('utf-8'),]
-            success, failure = putils.renameObjectsByPaths(paths, new_ids, new_titles)
+            paths = [obj_path, ]
+            new_ids = [move_data['newName'], ]
+            new_titles = [move_data['newTitle'].encode('utf-8'), ]
+            success, failure = putils.renameObjectsByPaths(
+                paths,
+                new_ids,
+                new_titles)
             if failure:
                 return states.CouldNotMoveError(
                     u'Object on %s could not be renamed/moved (%s)' % (
@@ -352,9 +361,20 @@ class ReceiveObject(BrowserView):
 
         else:
             #object has been moved
-            portal_path = '/'.join(self.context.portal_url.getPortalObject().getPhysicalPath())
-            old_parent = object.restrictedTraverse(portal_path + move_data['oldParent'])
-            new_parent = object.restrictedTraverse(portal_path + move_data['newParent'])
+            portal_path = '/'.join(
+                self.context.portal_url.getPortalObject().getPhysicalPath())
+            old_parent_path = portal_path + move_data['oldParent']
+            real_old_parent_path = '/'.join(object.aq_parent.getPhysicalPath())
+            if old_parent_path == real_old_parent_path:
+                # The object is where we expect it
+                old_parent = object.restrictedTraverse(old_parent_path)
+            else:
+                # old parent does not exist
+                # try to move the object by using the real_old_parent_path
+                old_parent = object.restrictedTraverse(real_old_parent_path)
+
+            new_parent = object.restrictedTraverse(
+                portal_path + move_data['newParent'])
             cutted = old_parent.manage_cutObjects(object.id)
             new_parent.manage_pasteObjects(cutted)
 
@@ -366,7 +386,7 @@ class ReceiveObject(BrowserView):
         """
         Deletes the object identified by metadata values.
 
-        @param metadata:        metadata dictionary containing UID, portal_type,
+        @param metadata:        metadata dict containing UID, portal_type,
         action, physicalPath and sibling_positions
         @type metadata:         dict
         @return:                CommunicationState instance
@@ -411,9 +431,9 @@ class ReceiveObject(BrowserView):
             return portalObject
         # for any other object we use the catalog tool
         brains = self.context.portal_catalog({
-                'path' : {
-                    'query' : absolutePath,
-                    'depth' : 0,
+                'path': {
+                    'query': absolutePath,
+                    'depth': 0,
                     },
                 })
         if len(brains)==0:
@@ -455,7 +475,8 @@ class ReceiveObject(BrowserView):
         portalPath = '/'.join(portalObject.getPhysicalPath())
         # concatinate with portalPath with relativePath
         # handle plone root
-        if relativePath == '/':return portalPath
+        if relativePath == '/':
+            return portalPath
         return portalPath + relativePath
 
     def updateObjectPosition(self, object, metadata):
@@ -465,7 +486,7 @@ class ReceiveObject(BrowserView):
         Objects, which do not exist at the sender instance, are moved to the
         bottom.
 
-        @param metadata:        metadata dictionary containing UID, portal_type,
+        @param metadata:        metadata dict containing UID, portal_type,
         action, physicalPath and sibling_positions
         @type metadata:         dict
         @return:                None
@@ -480,7 +501,7 @@ class ReceiveObject(BrowserView):
                 positions[id] = len(positions.keys())
 
         # sort ids by positions
-        object_ids.sort(lambda a,b: cmp(positions[a], positions[b]))
+        object_ids.sort(lambda a, b: cmp(positions[a], positions[b]))
 
         # order objects
         parent.moveObjectsByDelta(object_ids, -len(object_ids))
@@ -491,13 +512,12 @@ class ReceiveObject(BrowserView):
                 parent.get(id).reindexObject()
             except:
                 pass
-        # not working for tools
-
 
 
 class TestConnection(BrowserView):
     """
-    This BrowserView is used by the configlet of the module ftw.publisher.sender
+    This BrowserView is used by the configlet of the module
+    ftw.publisher.sender
     to test a connection to the receiever.
     """
 
@@ -512,4 +532,3 @@ class TestConnection(BrowserView):
             return 'ok'
         else:
             return 'Not a Plone-Site'
-

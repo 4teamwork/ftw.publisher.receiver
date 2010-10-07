@@ -4,6 +4,9 @@ Changelog
 
 1.0b1
 -----
+* Fix problem, while move objects from a different path than
+  transmitted. 
+  [07.10.2010, mathias.leimgruber]
 
 * Fixed "path wrong" problem by trying to rename or move objects which
   can't be pushed because the are in a wrong place.
