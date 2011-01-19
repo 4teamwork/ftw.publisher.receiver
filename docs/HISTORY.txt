@@ -2,10 +2,11 @@ Changelog
 =========
 
 
-1.0b1
------
+1.1
+---
+
 * Fix problem, while move objects from a different path than
-  transmitted. 
+  transmitted.
   [07.10.2010, mathias.leimgruber]
 
 * Fixed "path wrong" problem by trying to rename or move objects which
@@ -20,7 +21,7 @@ Changelog
 
 * Implemented PloneFormGen Creation - remove all auto generated files after formgen creation
   [28.06.2010, mathias.leimgruber]
- 
+
 
 * Added string encoding / decoding methods which work with json
   [24.06.2010, jbaumann]
@@ -48,6 +49,10 @@ Changelog
 
 * Fixed traversing bug / support for plone site root
   [11.05.2010, jbaumann]
+
+
+1.0b1
+-----
 
 * Added z3c.autoinclude for zcml-dependencies
   [07.05.2010, jbaumann]
