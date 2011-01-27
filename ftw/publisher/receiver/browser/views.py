@@ -506,10 +506,11 @@ class ReceiveObject(BrowserView):
         # order objects
         parent.moveObjectsByDelta(object_ids, -len(object_ids))
 
+
         # reindex all objects
         for id in object_ids:
             try:
-                parent.get(id).reindexObject(idxs=['positionInParent'])
+                parent.get(id).reindexObject(idxs=['positionInParent', 'getObjPositionInParent'])
             except:
                 pass
 
