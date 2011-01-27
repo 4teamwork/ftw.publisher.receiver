@@ -4,7 +4,9 @@ Changelog
 
 1.2
 ---
-
+* Implemented TDI (Turbocharged Direct Injection) :-) 
+  [27.01.2011, mathias.leimgruber]
+  
 
 1.1
 ---

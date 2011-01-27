@@ -509,7 +509,7 @@ class ReceiveObject(BrowserView):
         # reindex all objects
         for id in object_ids:
             try:
-                parent.get(id).reindexObject()
+                parent.get(id).reindexObject(idxs=['positionInParent'])
             except:
                 pass
 
