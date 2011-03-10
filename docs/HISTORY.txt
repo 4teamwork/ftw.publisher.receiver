@@ -4,7 +4,10 @@ Changelog
 
 1.3
 ---
-
+* If an object will be moved from a public to a private area. And the move job
+  fails because the target parent does not exist. It will raise a
+  CouldNotMoveError an deletes the source object on the remote site.
+  [10.03.2011, mathias.leimgruber] 
 
 1.2
 ---

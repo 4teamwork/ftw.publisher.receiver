@@ -373,10 +373,21 @@ class ReceiveObject(BrowserView):
                 # try to move the object by using the real_old_parent_path
                 old_parent = object.restrictedTraverse(real_old_parent_path)
 
-            new_parent = object.restrictedTraverse(
-                portal_path + move_data['newParent'])
-            cutted = old_parent.manage_cutObjects(object.id)
-            new_parent.manage_pasteObjects(cutted)
+            try:
+                new_parent = object.restrictedTraverse(
+                    portal_path + move_data['newParent'])
+
+                cutted = old_parent.manage_cutObjects(object.id)
+                new_parent.manage_pasteObjects(cutted)
+            except KeyError:
+                # The new parent does not exist.
+                # Delete the object, because we cannot move it
+                # Raise exception anyway...
+                old_parent.manage_delObjects([object.id])
+                return states.CouldNotMoveError(
+                    u'Object on %s could not be renamed/moved (%s)' % (
+                        obj_path,
+                        'Target parent does not exist, source object deleted'))
 
 
         # return a ObjectMovedState() instance
@@ -510,7 +521,8 @@ class ReceiveObject(BrowserView):
         # reindex all objects
         for id in object_ids:
             try:
-                parent.get(id).reindexObject(idxs=['positionInParent', 'getObjPositionInParent'])
+                parent.get(id).reindexObject(
+                    idxs=['positionInParent', 'getObjPositionInParent'])
             except:
                 pass
 
