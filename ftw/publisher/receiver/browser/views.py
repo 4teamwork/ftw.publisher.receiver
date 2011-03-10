@@ -372,14 +372,13 @@ class ReceiveObject(BrowserView):
                 # old parent does not exist
                 # try to move the object by using the real_old_parent_path
                 old_parent = object.restrictedTraverse(real_old_parent_path)
-
+            
             try:
                 new_parent = object.restrictedTraverse(
                     portal_path + move_data['newParent'])
-
                 cutted = old_parent.manage_cutObjects(object.id)
                 new_parent.manage_pasteObjects(cutted)
-            except KeyError:
+            except (KeyError, AttributeError):
                 # The new parent does not exist.
                 # Delete the object, because we cannot move it
                 # Raise exception anyway...
