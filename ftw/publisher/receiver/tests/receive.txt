@@ -1,0 +1,44 @@
+
+    >>> from ftw.publisher.receiver import tests
+    >>> import os.path
+
+    >>> def get_json_from_file(filename):
+    ...     directory = os.path.dirname(tests.__file__)
+    ...     return open(os.path.join(directory, 'jobs', filename)).read()
+
+
+    >>> self.setRoles(('Manager',))
+
+Test Image:
+
+    >>> 'bar.jpg' in self.folder.objectIds()
+    False
+
+    >>> self.portal.REQUEST.set('jsondata', get_json_from_file('image.json'))
+    >>> view = self.portal.restrictedTraverse('publisher.receive')
+    >>> print view()
+    ObjectCreatedState
+    Traceback (most recent call last):
+    None
+
+
+    >>> 'bar.jpg' in self.folder.objectIds()
+    True
+
+    >>> image = self.folder.get('bar.jpg')
+    >>> image
+    <ATImage at /plone/Members/test_user_1_/bar.jpg>
+
+Rename the image:
+
+    >>> self.portal.REQUEST.set('jsondata', get_json_from_file('move_image.json'))
+    >>> view = self.portal.restrictedTraverse('publisher.receive')
+    >>> print view()
+    ObjectMovedState
+    Traceback (most recent call last):
+    None
+
+    >>> 'bar.jpg' in self.folder.objectIds()
+    False
+    >>> 'bar2.jpg' in self.folder.objectIds()
+    True

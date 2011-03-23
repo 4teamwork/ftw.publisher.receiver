@@ -10,6 +10,7 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
 
 INTEGRATION_TESTS = [
     'decoder.txt',
+    'receive.txt',
     ]
 
 def test_suite():
