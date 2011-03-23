@@ -1,5 +1,13 @@
-ftw.publisher.receiver.egg-info
-build
-dist
-*.pyc
 *.mo
+*.pyc
+.installed.cfg
+.mr.developer.cfg
+bin/
+build
+buildout.cfg
+develop-eggs/
+dist
+fake-eggs/
+ftw.publisher.receiver.egg-info/
+parts/
+src/
