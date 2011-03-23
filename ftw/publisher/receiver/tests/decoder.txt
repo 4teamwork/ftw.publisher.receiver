@@ -1,9 +1,14 @@
 
+    >>> from ftw.publisher.receiver import tests
     >>> from ftw.publisher.receiver.decoder import Decoder
-    >>> from ftw.publisher.core.utils import decode_for_json
-    >>> from simplejson import dumps
+    >>> from Products.PloneTestCase.setup import portal_owner
+    >>> import os.path
 
     >>> decoder = Decoder(self.portal)
+
+    >>> def get_json_from_file(filename):
+    ...     directory = os.path.dirname(tests.__file__)
+    ...     return open(os.path.join(directory, 'jobs', filename)).read()
 
 Test decoding json data:
 
@@ -46,3 +51,22 @@ The validation assures, that the needed metadata are provided
     Traceback (most recent call last):
     ...
     PartialError: Missing "metadata"
+
+
+For getting the schema and unserializing the fields, the
+object is already created. So let's create the object for
+testing those methods.
+
+    >>> jsondata = get_json_from_file('basic_folder.json')
+    >>> decoder = Decoder(self.portal)
+    >>> foo = decoder(jsondata)
+
+    >>> obj = self.folder.get(self.folder.invokeFactory('Folder', 'foo'))
+    >>> obj._setUID(decoder.data['metadata']['UID'])
+
+    >>> schema = decoder.getSchema(obj)
+    >>> schema
+    <Products.Archetypes.Schema.Schema object at ...>
+
+    >>> self.folder.manage_delObjects(['foo'])
+
