@@ -1,0 +1,48 @@
+
+    >>> from ftw.publisher.receiver.decoder import Decoder
+    >>> from ftw.publisher.core.utils import decode_for_json
+    >>> from simplejson import dumps
+
+    >>> decoder = Decoder(self.portal)
+
+Test decoding json data:
+
+    >>> decoder.decodeJson('erroneous data')
+    Traceback (most recent call last):
+    ...
+    DecodeError: No JSON object could be decoded
+
+When the sender encodes to JSON, it prefixes all strings with
+the encoding, since some tools and components in plone need to
+utf8-encoded strings, others need unicode, etc.
+
+    >>> decoder.decodeJson('["unicode:foo", "utf8:bar"]')
+    [u'foo', 'bar']
+
+We don't need to test that further, since the function which
+converts the strings is tested in ftw.publisher.core package.
+
+
+The validation assures, that the needed metadata are provided
+
+    >>> decoder.data = dict(metadata={
+    ...     'UID': 'foobar123',
+    ...     'id': 'foo',
+    ...     'portal_type': 'Folder',
+    ...     'action': 'push',
+    ...     'physicalPath': '/platform/foo',
+    ...     'sibling_positions': []
+    ...     })
+    >>> decoder.validate()
+
+    >>> del decoder.data['metadata']['portal_type']
+    >>> decoder.validate()
+    Traceback (most recent call last):
+    ...
+    PartialError: Missing "metadata.portal_type"
+
+    >>> decoder.data = dict()
+    >>> decoder.validate()
+    Traceback (most recent call last):
+    ...
+    PartialError: Missing "metadata"
