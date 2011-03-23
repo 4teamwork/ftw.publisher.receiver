@@ -35,6 +35,7 @@ setup(name='ftw.publisher.receiver',
 
       install_requires=[
         'setuptools',
+        'ftw.publisher.core',
         ],
 
       extras_require={
