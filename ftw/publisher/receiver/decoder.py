@@ -1,47 +1,14 @@
-#
-# File:     communication.py
-# Author:   Jonas Baumann <j.baumann@4teamwork.ch>
-# Modified: 06.03.2009
-#
-# Copyright (c) 2007 by 4teamwork.ch
-#
-# GNU General Public License (GPL)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
-#
-__author__ = """Jonas Baumann <j.baumann@4teamwork.ch>"""
-
-# global imports
-import simplejson
-import base64
-
-# plone imports
 from Products.Archetypes.Field import FileField
 from Products.Archetypes.Field import ImageField
 from Products.Archetypes.Field import ReferenceField
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-
-
-# ftw.publisher imports
 from ftw.publisher.core import states
 from ftw.publisher.core.utils import encode_after_json
 from ftw.publisher.receiver import getLogger
-
-# zope imports
 from zope.component import queryAdapter
+import base64
+import simplejson
+
 
 #make archetype.schemaextender aware
 HAS_AT_SCHEMAEXTENDER = False
@@ -50,6 +17,7 @@ try:
     HAS_AT_SCHEMAEXTENDER = True
 except ImportError:
     pass
+
 
 class Decoder(object):
     """
@@ -97,7 +65,7 @@ class Decoder(object):
 
     def validate(self):
         """
-        Validates, if all required values are provided. If a 
+        Validates, if all required values are provided. If a
         error occures, a PartialError is raised.
         @raise:             PartialError
         @return:            None
@@ -145,15 +113,15 @@ class Decoder(object):
         the fields.
         Gets and sets from / to **self.data**
         """
-        
+
         # we just have to go throught if we have a dict, with possible
         # schema fields
         if not isinstance(self.data[jsonkey],dict):
             return self.data
-        
+
         schema = self.getSchema(object)
         fields = []
-        
+
         if schema is not None:
             fields = schema.fields()
         if HAS_AT_SCHEMAEXTENDER and queryAdapter(object, ISchemaExtender):
@@ -174,11 +142,11 @@ class Decoder(object):
                     # process it
                     file, mimetype, filename = field._process_input(data, filename=filename)
                     # we only use the file object
-                    self.data[jsonkey][name] = file 
+                    self.data[jsonkey][name] = file
             # ReferenceField: remove bad UIDs
             if isinstance(field, ReferenceField):
                 #check if field ist multiValued
-                if field.multiValued: 
+                if field.multiValued:
                     cleaned = []
                     for uid in self.data[jsonkey][name]:
                         obj = self.context.reference_catalog.lookupObject(uid)
@@ -197,7 +165,7 @@ class Decoder(object):
                         if self.data[jsonkey][name]:
                             self.logger.warn("The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),self.data[jsonkey][name]))
                     self.data[jsonkey][name] = cleaned
-                    
+
             # ImageField: treat empty files special
             if isinstance(field, ImageField):
                 if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
@@ -206,5 +174,5 @@ class Decoder(object):
             if field.__class__==FileField:
                 if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
                     self.data[jsonkey][name] = 'DELETE_FILE'
-        
+
         return self.data

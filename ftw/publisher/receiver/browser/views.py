@@ -1,52 +1,18 @@
-#
-# File:     communication.py
-# Author:   Jonas Baumann <j.baumann@4teamwork.ch>
-# Modified: 06.03.2009
-#
-# Copyright (c) 2007 by 4teamwork.ch
-#
-# GNU General Public License (GPL)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
-#
-__author__ = """Jonas Baumann <j.baumann@4teamwork.ch>"""
-
-# python imports
-import traceback
-import sys
-import os.path
-
-# zope imports
-from Products.Five import BrowserView
-from zope.component import getAdapters
-from zope import event
-
-# plone imports
+from DateTime import DateTime
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five import BrowserView
 from ZODB.POSException import ConflictError
-from zope.publisher.interfaces import Retry
-
-# ftw.publisher imports
-from ftw.publisher.receiver import decoder
-from ftw.publisher.receiver import getLogger
 from ftw.publisher.core import states, communication
 from ftw.publisher.core.interfaces import IDataCollector
+from ftw.publisher.receiver import decoder
+from ftw.publisher.receiver import getLogger
 from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
-
-from DateTime import DateTime
+from zope import event
+from zope.component import getAdapters
+from zope.publisher.interfaces import Retry
+import os.path
+import sys
+import traceback
 
 
 class ReceiveObject(BrowserView):
@@ -372,7 +338,7 @@ class ReceiveObject(BrowserView):
                 # old parent does not exist
                 # try to move the object by using the real_old_parent_path
                 old_parent = object.restrictedTraverse(real_old_parent_path)
-            
+
             try:
                 new_parent = object.restrictedTraverse(
                     portal_path + move_data['newParent'])

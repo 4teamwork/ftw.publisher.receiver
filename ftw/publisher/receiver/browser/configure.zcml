@@ -1,22 +1,22 @@
 <configure
-        xmlns="http://namespaces.zope.org/zope"
-        xmlns:browser="http://namespaces.zope.org/browser"
-        xmlns:five="http://namespaces.zope.org/five"
-        i18n_domain="ftw.publisher.sender">
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      xmlns:five="http://namespaces.zope.org/five"
+      i18n_domain="ftw.publisher.sender">
 
 
     <browser:page
-            name="publisher.receive"
-            for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-            class=".views.ReceiveObject"
-            permission="cmf.ReviewPortalContent"
-            />
+          name="publisher.receive"
+          for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+          class=".views.ReceiveObject"
+          permission="cmf.ReviewPortalContent"
+          />
 
     <browser:page
-            name="publisher.testConnection"
-            for="*"
-            class=".views.TestConnection"
-            permission="cmf.ReviewPortalContent"
-            />
+          name="publisher.testConnection"
+          for="*"
+          class=".views.TestConnection"
+          permission="cmf.ReviewPortalContent"
+          />
 
 </configure>
