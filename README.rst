@@ -9,7 +9,6 @@ for unserializing publishing requests and creating, updating or deleting
 objects. See the links below for further information.
 
 
-=====
 Links
 =====
 
@@ -24,7 +23,6 @@ Here are some additional links:
 - Wiki: https://github.com/4teamwork/ftw.publisher.sender/wiki
 
 
-=======
 Credits
 =======
 
