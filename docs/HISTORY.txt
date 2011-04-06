@@ -4,16 +4,19 @@ Changelog
 
 1.3
 ---
+
 * If an object will be moved from a public to a private area. And the move job
   fails because the target parent does not exist. It will raise a
   CouldNotMoveError an deletes the source object on the remote site.
-  [10.03.2011, mathias.leimgruber] 
+  [10.03.2011, mathias.leimgruber]
+
 
 1.2
 ---
-* Implemented TDI (Turbocharged Direct Injection) :-) 
+
+* Implemented TDI (Turbocharged Direct Injection) :-)
   [27.01.2011, mathias.leimgruber]
-  
+
 
 1.1
 ---
@@ -40,7 +43,6 @@ Changelog
   [24.06.2010, jbaumann]
 
 * Issue #150 publisher: Move-Jobs funktionieren nicht
-  https://extranet.4teamwork.ch/projects/integration-zug.ch-izug/tracker-integration-zug.ch-izug/150/
   [22.06.2010, jbaumann]
 
 * Fixed fixed namespace_packages in setup.py
@@ -54,7 +56,6 @@ Changelog
   [04.06.2010, jbaumann]
 
 * Issue #977 Integration: Probleme mit dem Publizieren von Objekten
-  https://extranet.4teamwork.ch/support/zug/maintlog/977/view
   [03.06.2010, jbaumann]
 
 * Fixed schema bug
