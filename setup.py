@@ -7,6 +7,7 @@ maintainer = 'Jonas Baumann'
 
 tests_require=[
     'collective.testcaselayer',
+    'simplejson',
     ]
 
 setup(name='ftw.publisher.receiver',
