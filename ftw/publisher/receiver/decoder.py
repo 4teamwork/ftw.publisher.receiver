@@ -7,7 +7,7 @@ from ftw.publisher.core.utils import encode_after_json
 from ftw.publisher.receiver import getLogger
 from zope.component import queryAdapter
 import base64
-import simplejson
+import json
 
 
 #make archetype.schemaextender aware
@@ -47,8 +47,8 @@ class Decoder(object):
 
     def decodeJson(self, jsondata):
         """
-        Decodes the JSON data with the simplejson module.
-        If the simplejson module cannot decode the string, a
+        Decodes the JSON data with the json module.
+        If the json module cannot decode the string, a
         DecodeError is raised.
         @param jsondata:    JSON data
         @type jsondata:     string
@@ -57,7 +57,7 @@ class Decoder(object):
         @raise:             DecodeError
         """
         try:
-            data = simplejson.loads(jsondata)
+            data = json.loads(jsondata)
         except Exception, e:
             raise states.DecodeError(str(e))
         data = encode_after_json(data)

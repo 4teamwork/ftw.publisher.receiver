@@ -7,7 +7,6 @@ maintainer = 'Jonas Baumann'
 
 tests_require=[
     'collective.testcaselayer',
-    'simplejson',
     ]
 
 setup(name='ftw.publisher.receiver',
@@ -41,7 +40,6 @@ setup(name='ftw.publisher.receiver',
       extras_require={
         'tests': tests_require,
         'PloneFormGen': ['Products.PloneFormGen'],
-        'python2.4': ['simplejson']
         },
 
       tests_require=tests_require,
