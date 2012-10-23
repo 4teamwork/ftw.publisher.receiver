@@ -27,7 +27,7 @@ Test Image:
 
     >>> image = self.folder.get('bar.jpg')
     >>> image
-    <ATImage at /plone/Members/test_user_1_/bar.jpg>
+    <ATBlob at /plone/Members/test_user_1_/bar.jpg>
 
 Rename the image:
 
