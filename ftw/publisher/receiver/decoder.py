@@ -1,3 +1,4 @@
+from AccessControl.SecurityInfo import ClassSecurityInformation
 from Products.Archetypes.Field import FileField
 from Products.Archetypes.Field import ImageField
 from Products.Archetypes.Field import ReferenceField
@@ -25,6 +26,8 @@ class Decoder(object):
     It also validates and decodes all schema field values.
     """
 
+    security = ClassSecurityInformation()
+
     def __init__(self, context):
         """
         Constructor: stores context as object attribute
@@ -34,6 +37,7 @@ class Decoder(object):
         self.context = context
         self.logger = getLogger()
 
+    security.declarePrivate('__call__')
     def __call__(self, jsondata):
         """
         Decodes the jsondata to a dictionary, validates it,
@@ -45,6 +49,7 @@ class Decoder(object):
         self.validate()
         return self.data
 
+    security.declarePrivate('decodeJson')
     def decodeJson(self, jsondata):
         """
         Decodes the JSON data with the json module.
@@ -63,6 +68,7 @@ class Decoder(object):
         data = encode_after_json(data)
         return data
 
+    security.declarePrivate('validate')
     def validate(self):
         """
         Validates, if all required values are provided. If a
@@ -88,6 +94,7 @@ class Decoder(object):
                     if subkey not in self.data[key]:
                         raise states.PartialError('Missing "%s.%s"' % (key, subkey))
 
+    security.declarePrivate('getSchema')
     def getSchema(self, object):
         """
         Returns the Schema of the portal_type defined in the metadata.
@@ -107,6 +114,7 @@ class Decoder(object):
         else:
             return None
 
+    security.declarePrivate('unserializeFields')
     def unserializeFields(self,object, jsonkey):
         """
         Unserializes the fielddata and optimizes it of the modifiers of
