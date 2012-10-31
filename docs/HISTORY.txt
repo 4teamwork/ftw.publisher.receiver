@@ -2,82 +2,81 @@ Changelog
 =========
 
 
-1.4
----
+1.4 (unreleased)
+----------------
+
+- Nothing changed yet.
 
 
-1.3
----
+1.3 (2011-04-06)
+----------------
 
-* Cleanup, move to github (https://github.com/4teamwork/ftw.publisher.receiver) and
+- Cleanup, move to github (https://github.com/4teamwork/ftw.publisher.receiver) and
   prepare for release.
-  [jbaumann]
+  [jone]
 
-* If an object will be moved from a public to a private area. And the move job
+- If an object will be moved from a public to a private area. And the move job
   fails because the target parent does not exist. It will raise a
   CouldNotMoveError an deletes the source object on the remote site.
-  [10.03.2011, mathias.leimgruber]
+  [mathias.leimgruber]
 
 
-1.2
----
+1.2 (2011-02-01)
+----------------
 
-* Implemented TDI (Turbocharged Direct Injection) :-)
-  [27.01.2011, mathias.leimgruber]
+- Implemented TDI (Turbocharged Direct Injection) :-)
+  [mathias.leimgruber]
 
 
-1.1
----
+1.1 (2011-01-19)
+----------------
 
-* Fix problem, while move objects from a different path than
+- Fix problem, while move objects from a different path than
   transmitted.
-  [07.10.2010, mathias.leimgruber]
+  [mathias.leimgruber]
 
-* Fixed "path wrong" problem by trying to rename or move objects which
+- Fixed "path wrong" problem by trying to rename or move objects which
   can't be pushed because the are in a wrong place.
-  [24.08.2010, jbaumann]
+  [jone]
 
-* Using new states from `ftw.publisher.core`.
-  [19.08.2010, jbaumann]
+- Using new states from `ftw.publisher.core`.
+  [jone]
 
-* Implemented AfterCreatedEvent and AfterUpdatedEvent
-  [28.06.2010, mathias.leimgruber]
+- Implemented AfterCreatedEvent and AfterUpdatedEvent
+  [mathias.leimgruber]
 
-* Implemented PloneFormGen Creation - remove all auto generated files after formgen creation
-  [28.06.2010, mathias.leimgruber]
+- Implemented PloneFormGen Creation - remove all auto generated files after formgen creation
+  [mathias.leimgruber]
 
 
-* Added string encoding / decoding methods which work with json
-  [24.06.2010, jbaumann]
+- Added string encoding / decoding methods which work with json
+  [jone]
 
-* Issue #150 publisher: Move-Jobs funktionieren nicht
-  [22.06.2010, jbaumann]
+- Fixed fixed namespace_packages in setup.py
+  [jone]
 
-* Fixed fixed namespace_packages in setup.py
-  [22.06.2010, jbaumann]
-
-* The modification date is now re-set. The modification date of the parent object
+- The modification date is now re-set. The modification date of the parent object
   will not change.
-  [09.06.2010, jbaumann]
+  [jone]
 
-* Fixed encoding problem: generally encoding anything received with utf8
-  [04.06.2010, jbaumann]
+- Fixed encoding problem: generally encoding anything received with utf8
+  [jone]
 
-* Issue #977 Integration: Probleme mit dem Publizieren von Objekten
-  [03.06.2010, jbaumann]
+- Issue #977 Integration: Probleme mit dem Publizieren von Objekten
+  [jone]
 
-* Fixed schema bug
-  [26.05.2010, jbaumann]
+- Fixed schema bug
+  [jone]
 
-* Fixed traversing bug / support for plone site root
-  [11.05.2010, jbaumann]
+- Fixed traversing bug / support for plone site root
+  [jone]
 
 
-1.0b1
------
+1.0b1 (2010-05-07)
+------------------
 
-* Added z3c.autoinclude for zcml-dependencies
-  [07.05.2010, jbaumann]
+- Added z3c.autoinclude for zcml-dependencies
+  [jone]
 
-* implement rename and cut/paste support [mathias.leimgruber]
-
+- implement rename and cut/paste support
+  [mathias.leimgruber]
