@@ -1,13 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
-version = open(os.path.join('ftw', 'publisher', 'receiver',
-                            'version.txt')).read().strip()
+version = '1.4.dev0'
 maintainer = 'Jonas Baumann'
 
 tests_require=[
     'collective.testcaselayer',
-    'simplejson',
     ]
 
 setup(name='ftw.publisher.receiver',
@@ -41,7 +39,6 @@ setup(name='ftw.publisher.receiver',
       extras_require={
         'tests': tests_require,
         'PloneFormGen': ['Products.PloneFormGen'],
-        'python2.4': ['simplejson']
         },
 
       tests_require=tests_require,
