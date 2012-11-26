@@ -2,10 +2,11 @@ Changelog
 =========
 
 
-1.4 (unreleased)
+2.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Plone 4 support, drop Plone 3.
+  [jone]
 
 
 1.3 (2011-04-06)
