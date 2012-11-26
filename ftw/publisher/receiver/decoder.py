@@ -110,7 +110,7 @@ class Decoder(object):
         if not isinstance(self.data[jsonkey],dict):
             return self.data
 
-        fields = self.object.Schema().fields()
+        fields = object.Schema().fields()
 
         for field in fields:
             name = field.getName()
