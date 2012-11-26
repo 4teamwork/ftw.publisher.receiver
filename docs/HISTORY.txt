@@ -2,8 +2,15 @@ Changelog
 =========
 
 
-1.3.1
------
+1.3.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+
+1.3.1 (2012-11-26)
+------------------
 
 * Removed archetypes.schemaextender, since we can use obj.Schema() for getting.
   [Julian Infanger]
@@ -24,13 +31,7 @@ Changelog
 1.2
 ---
 
-1.3.2 (unreleased)
-                  
-
-- Nothing changed yet.
-
-
-1.3.1 (2012-11-26)
+* Implemented TDI (Turbocharged Direct Injection) :-)
   [27.01.2011, mathias.leimgruber]
 
 
@@ -88,4 +89,3 @@ Changelog
   [07.05.2010, jbaumann]
 
 * implement rename and cut/paste support [mathias.leimgruber]
-
