@@ -5,6 +5,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Removed archetypes.schemaextender, since we can use obj.Schema() for getting.
+  [Julian Infanger]
+
 - Plone 4 support, drop Plone 3.
   [jone]
 

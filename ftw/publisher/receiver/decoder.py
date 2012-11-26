@@ -11,15 +11,6 @@ import base64
 import json
 
 
-#make archetype.schemaextender aware
-HAS_AT_SCHEMAEXTENDER = False
-try:
-    from archetypes.schemaextender.interfaces import ISchemaExtender
-    HAS_AT_SCHEMAEXTENDER = True
-except ImportError:
-    pass
-
-
 class Decoder(object):
     """
     Decodes json data to dictionary and validates it.
@@ -127,13 +118,7 @@ class Decoder(object):
         if not isinstance(self.data[jsonkey],dict):
             return self.data
 
-        schema = self.getSchema(object)
-        fields = []
-
-        if schema is not None:
-            fields = schema.fields()
-        if HAS_AT_SCHEMAEXTENDER and queryAdapter(object, ISchemaExtender):
-            fields += ISchemaExtender(object).getFields()
+        fields = object.Schema().fields()
 
         for field in fields:
             name = field.getName()
