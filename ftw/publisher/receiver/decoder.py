@@ -3,6 +3,7 @@ from Products.Archetypes.Field import FileField
 from Products.Archetypes.Field import ImageField
 from Products.Archetypes.Field import ReferenceField
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from StringIO import StringIO
 from ftw.publisher.core import states
 from ftw.publisher.core.utils import encode_after_json
 from ftw.publisher.receiver import getLogger
@@ -124,18 +125,21 @@ class Decoder(object):
             name = field.getName()
             if name not in self.data[jsonkey].keys():
                 continue
+
             # DateTimeField doesnt need to be converted t DateTime
             # FileFields are base64 encoded
             if isinstance(field, FileField):
                 value = self.data[jsonkey][name]
-                if isinstance(value, dict):
+                if isinstance(value, dict) and not value['data']:
+                    self.data[jsonkey][name] = None
+
+                elif isinstance(value, dict):
                     # decode it
-                    data = base64.decodestring(value['data'])
-                    filename = value['filename']
-                    # process it
-                    file, mimetype, filename = field._process_input(data, filename=filename)
-                    # we only use the file object
-                    self.data[jsonkey][name] = file
+                    data = StringIO(base64.decodestring(value['data']))
+                    data.seek(0)
+                    setattr(data, 'filename', value['filename'])
+                    self.data[jsonkey][name] = data
+
             # ReferenceField: remove bad UIDs
             if isinstance(field, ReferenceField):
                 #check if field ist multiValued
@@ -147,8 +151,10 @@ class Decoder(object):
                             cleaned.append(uid)
                         else:
                             if uid:
-                                self.logger.warn("The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),uid))
+                                self.logger.warn(
+                                    "The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),uid))
                     self.data[jsonkey][name] = cleaned
+
                 else:
                     cleaned = None
                     obj = self.context.reference_catalog.lookupObject(self.data[jsonkey][name])
@@ -161,11 +167,11 @@ class Decoder(object):
 
             # ImageField: treat empty files special
             if isinstance(field, ImageField):
-                if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
+                if not self.data[jsonkey][name]:
                     self.data[jsonkey][name] = 'DELETE_IMAGE'
             # FileField (direct): treat empty files special
             if field.__class__==FileField:
-                if not self.data[jsonkey][name] or len(self.data[jsonkey][name])==0:
+                if not self.data[jsonkey][name]:
                     self.data[jsonkey][name] = 'DELETE_FILE'
 
         return self.data

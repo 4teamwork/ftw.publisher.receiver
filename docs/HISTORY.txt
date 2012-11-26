@@ -5,6 +5,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Fix decoding blobs so that it does not use the old _process_input method.
+  [jone]
+
 - Removed archetypes.schemaextender, since we can use obj.Schema() for getting.
   [Julian Infanger]
 
