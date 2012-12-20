@@ -5,6 +5,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Implement better blob file detection (ftw.file support).
+  [jone]
+
 - Fix decoding blobs so that it does not use the old _process_input method.
   [jone]
 

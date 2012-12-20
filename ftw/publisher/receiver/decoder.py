@@ -7,9 +7,19 @@ from StringIO import StringIO
 from ftw.publisher.core import states
 from ftw.publisher.core.utils import encode_after_json
 from ftw.publisher.receiver import getLogger
-from zope.component import queryAdapter
 import base64
 import json
+import pkg_resources
+
+try:
+    pkg_resources.get_distribution('plone.app.blob')
+
+except pkg_resources.DistributionNotFound:
+    HAS_BLOBS = False
+
+else:
+    HAS_BLOBS = True
+    from plone.app.blob.interfaces import IBlobField
 
 
 class Decoder(object):
@@ -128,8 +138,10 @@ class Decoder(object):
 
             # DateTimeField doesnt need to be converted t DateTime
             # FileFields are base64 encoded
-            if isinstance(field, FileField):
+
+            if HAS_BLOBS and IBlobField.providedBy(field):
                 value = self.data[jsonkey][name]
+
                 if isinstance(value, dict) and not value['data']:
                     self.data[jsonkey][name] = None
 
