@@ -110,6 +110,9 @@ class Decoder(object):
         if not isinstance(self.data[jsonkey],dict):
             return self.data
 
+        if IPloneSiteRoot.providedBy(object):
+            return self.data
+
         fields = object.Schema().fields()
 
         for field in fields:
