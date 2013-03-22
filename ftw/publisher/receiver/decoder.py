@@ -1,4 +1,5 @@
 from AccessControl.SecurityInfo import ClassSecurityInformation
+from Acquisition import aq_base
 from Products.Archetypes.Field import FileField
 from Products.Archetypes.Field import ImageField
 from Products.Archetypes.Field import ReferenceField
@@ -130,6 +131,10 @@ class Decoder(object):
             return self.data
 
         if IPloneSiteRoot.providedBy(object):
+            return self.data
+
+        if not hasattr(aq_base(object), 'Schema'):
+            # might be dexterity
             return self.data
 
         fields = object.Schema().fields()

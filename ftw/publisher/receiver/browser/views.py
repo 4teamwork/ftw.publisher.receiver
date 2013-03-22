@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from DateTime import DateTime
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Five import BrowserView
@@ -11,6 +12,7 @@ from zope import event
 from zope.component import getAdapters
 from zope.publisher.interfaces import Retry
 import os.path
+import plone.uuid
 import sys
 import traceback
 
@@ -211,7 +213,14 @@ class ReceiveObject(BrowserView):
                     metadata['portal_type'],
                     metadata['id'],
                     ))
-            object._setUID(metadata['UID'])
+
+            if hasattr(aq_base(object), '_setUID'):
+                object._setUID(metadata['UID'])
+
+            setattr(object,
+                    plone.uuid.interfaces.ATTRIBUTE_NAME,
+                    metadata['UID'])
+
             #object.processForm()
             new_object = True
         else:
@@ -221,7 +230,7 @@ class ReceiveObject(BrowserView):
                 pass
 
         # finalize
-        if not is_root:
+        if hasattr(aq_base(object), 'processForm'):
             object.processForm()
 
         if not is_root:
