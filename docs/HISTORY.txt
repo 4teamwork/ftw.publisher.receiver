@@ -5,6 +5,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Dexterity support.
+  [jone]
+
 - Do not unserialize schema fields on plone site root.
   The plone site has no schema.
   [tschanzt]
