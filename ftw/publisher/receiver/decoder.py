@@ -147,7 +147,8 @@ class Decoder(object):
             # DateTimeField doesnt need to be converted t DateTime
             # FileFields are base64 encoded
 
-            if HAS_BLOBS and IBlobField.providedBy(field):
+            if HAS_BLOBS and IBlobField.providedBy(field) or \
+                    isinstance(field, (ImageField, FileField)):
                 value = self.data[jsonkey][name]
 
                 if isinstance(value, dict) and not value['data']:
