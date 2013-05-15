@@ -5,6 +5,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Fix non-blob image decoding.
+  [jone]
+
 - Dexterity support.
   [jone]
 
