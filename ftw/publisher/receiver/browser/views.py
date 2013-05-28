@@ -485,7 +485,7 @@ class ReceiveObject(BrowserView):
         """
         positions = metadata['sibling_positions']
         parent = object.aq_inner.aq_parent
-        object_ids = [o['id'] for o in parent._objects]
+        object_ids = list(parent.objectIds())
 
         # move objects with no position info to the bottom
         for id in object_ids:
