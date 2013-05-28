@@ -5,7 +5,8 @@ Changelog
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix updateObjectPosition method. "_objects" does no longer exists.
+  [mathias.leimgruber]
 
 
 2.0 (2013-05-24)
