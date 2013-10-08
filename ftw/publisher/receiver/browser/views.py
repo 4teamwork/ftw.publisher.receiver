@@ -10,16 +10,16 @@ from ftw.publisher.core.interfaces import IDataCollector
 from ftw.publisher.receiver import decoder
 from ftw.publisher.receiver import getLogger
 from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
+from plone.app.uuid.utils import uuidToObject
 from zope import event
 from zope.component import getAdapters
 from zope.event import notify
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.publisher.interfaces import Retry
 import os.path
-import plone.uuid
 import sys
 import traceback
-
+import plone.uuid
 
 class ReceiveObject(BrowserView):
     """
@@ -404,7 +404,7 @@ class ReceiveObject(BrowserView):
         @type uid:      string
         @return:        Plone-Object or None
         """
-        return self.context.reference_catalog.lookupObject(uid)
+        return uuidToObject(uid)
 
     def _getObjectByPath(self, absolutePath):
         """
