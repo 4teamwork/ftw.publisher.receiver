@@ -404,11 +404,7 @@ class ReceiveObject(BrowserView):
         @type uid:      string
         @return:        Plone-Object or None
         """
-        cat = self.context.portal_catalog
-        brains = cat({'UID':uid})
-        if len(brains) > 0:
-            return brains[0].getObject()
-        return
+        return self.context.reference_catalog.lookupObject(uid)
 
     def _getObjectByPath(self, absolutePath):
         """
