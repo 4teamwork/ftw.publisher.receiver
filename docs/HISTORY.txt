@@ -5,7 +5,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix getObjectbyUid for nonreferenceable objects. Drops Plone 4.0 support.
+  [tschanzt]
 
 
 2.0.1 (2013-09-02)
