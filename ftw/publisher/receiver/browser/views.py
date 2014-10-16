@@ -21,6 +21,7 @@ import sys
 import traceback
 import plone.uuid
 
+
 class ReceiveObject(BrowserView):
     """
     The ReceiveObject View is called be ftw.publisher.sender module.
@@ -53,6 +54,8 @@ class ReceiveObject(BrowserView):
             resp += ''.join(traceback.format_exception(*sys.exc_info()))
         except:
             pass
+
+        self.request.RESPONSE.setHeader('X-Theme-Disabled', 'True')
         return resp
 
     def handleRequest(self):
