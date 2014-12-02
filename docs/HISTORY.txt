@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.3 (unreleased)
+2.0.3 (2014-12-02)
 ------------------
 
 - Diazo should never touch a response created by the receiver.
