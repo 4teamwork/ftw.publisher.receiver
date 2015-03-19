@@ -262,7 +262,7 @@ class ReceiveObject(BrowserView):
                 wf.updateRoleMappingsFor(object)
 
         # updates all data with the registered adapters for IDataCollector
-        adapters = getAdapters((object, ), IDataCollector)
+        adapters = sorted(getAdapters((object, ), IDataCollector))
         for name, adapter in adapters:
             data = self.decoder.unserializeFields(object, name)
             adapter.setData(data[name], metadata)
