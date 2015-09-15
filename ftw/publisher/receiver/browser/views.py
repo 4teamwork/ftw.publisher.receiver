@@ -72,27 +72,34 @@ class ReceiveObject(BrowserView):
             'Receiving request (data length: %i Byte)' % len(jsondata))
         if not jsondata:
             raise states.InvalidRequestError('No jsondata provided')
+
         # decode the jsondata to a python dictionary
-        #XXX we do this now twice (also in core adapters)
+        # XXX we do this now twice (also in core adapters)
         self.decoder = decoder.Decoder(self.context)
         self.data = self.decoder(jsondata)
+
         # get the action type ..
         action = self.getAction()
+
         # .. and run the action specific method ..
-        if action=='push':
+        if action == 'push':
             # extract medata from data, we want to pass metadata
             # separatly to dataCollector adapters
             metadata = self.data['metadata']
             return self.pushAction(metadata, self.data)
+
         elif action == 'move':
             metadata = self.data['metadata']
             return self.moveAction(metadata, self.data)
-        elif action=='delete':
+
+        elif action == 'delete':
             metadata = self.data['metadata']
             return self.deleteAction(metadata)
+
         else:
             # ... or raise a UnexpectedError
             raise states.UnknownActionError()
+
         # should not get here
         raise states.UnexpectedError()
 
@@ -183,7 +190,6 @@ class ReceiveObject(BrowserView):
                         else:
                             object = self._getObjectByPath(expected_path)
 
-
                 elif object.UID() != metadata['UID']:
                     raise states.UIDPathMismatchError({
                             'problem': 'UID wrong',
@@ -191,14 +197,13 @@ class ReceiveObject(BrowserView):
                             'expected uid': metadata['UID'],
                             })
 
-
         parent_modified_date = None
 
         # create the object if its not existing ...
         new_object = False
         if not object:
             self.logger.info(
-                'Object with UID %s does not existing: creating new object'%(
+                'Object with UID %s does not existing: creating new object' % (
                     metadata['UID'],
                     )
                 )
@@ -231,8 +236,9 @@ class ReceiveObject(BrowserView):
 
                 notify(ObjectAddedEvent(object))
 
-            #object.processForm()
+            # object.processForm()
             new_object = True
+
         else:
             try:
                 parent_modified_date = object.aq_inner.aq_parent.modified()
@@ -345,7 +351,7 @@ class ReceiveObject(BrowserView):
                         failure.get(obj_path).__str__()))
 
         else:
-            #object has been moved
+            # object has been moved
             portal_path = '/'.join(
                 self.context.portal_url.getPortalObject().getPhysicalPath())
             old_parent_path = portal_path + move_data['oldParent']
@@ -372,7 +378,6 @@ class ReceiveObject(BrowserView):
                     u'Object on %s could not be renamed/moved (%s)' % (
                         obj_path,
                         'Target parent does not exist, source object deleted'))
-
 
         # return a ObjectMovedState() instance
         return states.ObjectMovedState()
@@ -421,7 +426,7 @@ class ReceiveObject(BrowserView):
         # plone site root is not in catalog ...
         portalObject = self.context.portal_url.getPortalObject()
         portalPath = '/'.join(portalObject.getPhysicalPath())
-        if absolutePath==portalPath:
+        if absolutePath == portalPath:
             # plone site root is searched, return it
             return portalObject
         # for any other object we use the catalog tool
@@ -431,7 +436,7 @@ class ReceiveObject(BrowserView):
                     'depth': 0,
                     },
                 })
-        if len(brains)==0:
+        if len(brains) == 0:
             return None
         else:
             return brains[0].getObject()
@@ -500,7 +505,6 @@ class ReceiveObject(BrowserView):
 
         # order objects
         parent.moveObjectsByDelta(object_ids, -len(object_ids))
-
 
         # reindex all objects
         for id in object_ids:

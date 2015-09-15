@@ -8,4 +8,3 @@ def getLogger():
     @return logger instance
     """
     return getPublisherLogger('ftw.publisher.receiver')
-

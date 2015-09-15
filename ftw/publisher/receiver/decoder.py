@@ -80,7 +80,7 @@ class Decoder(object):
         @return:            None
         """
         structure = {
-            'metadata' : [
+            'metadata': [
                 'UID',
                 'id',
                 'portal_type',
@@ -95,7 +95,8 @@ class Decoder(object):
             else:
                 for subkey in structure[key]:
                     if subkey not in self.data[key]:
-                        raise states.PartialError('Missing "%s.%s"' % (key, subkey))
+                        raise states.PartialError(
+                            'Missing "%s.%s"' % (key, subkey))
 
     security.declarePrivate('getSchema')
     def getSchema(self, object):
@@ -118,7 +119,7 @@ class Decoder(object):
             return None
 
     security.declarePrivate('unserializeFields')
-    def unserializeFields(self,object, jsonkey):
+    def unserializeFields(self, object, jsonkey):
         """
         Unserializes the fielddata and optimizes it of the modifiers of
         the fields.
@@ -127,7 +128,7 @@ class Decoder(object):
 
         # we just have to go throught if we have a dict, with possible
         # schema fields
-        if not isinstance(self.data[jsonkey],dict):
+        if not isinstance(self.data[jsonkey], dict):
             return self.data
 
         if IPloneSiteRoot.providedBy(object):
@@ -163,7 +164,7 @@ class Decoder(object):
 
             # ReferenceField: remove bad UIDs
             if isinstance(field, ReferenceField):
-                #check if field ist multiValued
+                # check if field ist multiValued
                 if field.multiValued:
                     cleaned = []
                     for uid in self.data[jsonkey][name]:
@@ -173,25 +174,38 @@ class Decoder(object):
                         else:
                             if uid:
                                 self.logger.warn(
-                                    "The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),uid))
+                                    ('The reference field <%s> of object(%s)'
+                                     ' has a broken reference to'
+                                     ' the object %s') % (name,
+                                                          object.UID(),
+                                                          uid))
+
                     self.data[jsonkey][name] = cleaned
 
                 else:
                     cleaned = None
-                    obj = self.context.reference_catalog.lookupObject(self.data[jsonkey][name])
+                    obj = self.context.reference_catalog.lookupObject(
+                        self.data[jsonkey][name])
                     if obj:
                         cleaned = self.data[jsonkey][name]
                     else:
                         if self.data[jsonkey][name]:
-                            self.logger.warn("The reference field <%s> of object(%s) has a broken reference to the object %s" % (name,object.UID(),self.data[jsonkey][name]))
+                            self.logger.warn(
+                                ('The reference field <%s> of object(%s) has a'
+                                 ' broken reference to the object %s') % (
+                                     name,
+                                     object.UID(),
+                                     self.data[jsonkey][name]))
+
                     self.data[jsonkey][name] = cleaned
 
             # ImageField: treat empty files special
             if isinstance(field, ImageField):
                 if not self.data[jsonkey][name]:
                     self.data[jsonkey][name] = 'DELETE_IMAGE'
+
             # FileField (direct): treat empty files special
-            if field.__class__==FileField:
+            if field.__class__ == FileField:
                 if not self.data[jsonkey][name]:
                     self.data[jsonkey][name] = 'DELETE_FILE'
 
