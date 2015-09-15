@@ -1,6 +1,4 @@
 from Acquisition import aq_base
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from DateTime import DateTime
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Five import BrowserView
