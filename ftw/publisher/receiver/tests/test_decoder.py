@@ -61,3 +61,42 @@ class TestDecoder(IntegrationTestCase):
 
         schema = self.decoder.getSchema(folder)
         self.assertTrue(schema)
+
+    def test_unserialize_fields(self):
+        self.decoder(self.asset('basic_folder.json').text())
+        self.grant('Manager')
+        folder = create(Builder('folder').titled('Foo'))
+        folder._setUID(self.decoder.data['metadata']['UID'])
+
+        field_data = self.decoder.unserializeFields(
+            folder, u'field_data_adapter')[u'field_data_adapter']
+
+        self.assertDictContainsSubset(
+            {
+                'allowDiscussion': False,
+                'contributors': [],
+                'creation_date': '2011/03/23 14:26:54.592 GMT+1',
+                'creators': ['test_user_1_'],
+                'description': '',
+                'effectiveDate': None,
+                'excludeFromNav': False,
+                'expirationDate': None,
+                'id': 'foo',
+                'language': '',
+                'location': '',
+                'modification_date': '2011/03/23 14:26:54.615 GMT+1',
+                'nextPreviousEnabled': False,
+                'relatedItems': [],
+                'rights': '',
+                'subject': [],
+                'title': 'Foo',
+            },
+            field_data)
+
+    def test_site_root_schema_is_None(self):
+        # The site root hase no schema.
+        # Therefore getting the schema schould return None
+        # and should not crash.
+
+        self.decoder(self.asset('plonesite.json').text())
+        self.assertEquals(None, self.decoder.getSchema(self.portal))
