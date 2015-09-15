@@ -38,11 +38,23 @@ class TestDecoder(IntegrationTestCase):
         self.assertEquals('/plone/bar2.jpg', '/'.join(image.getPhysicalPath()))
         self.assertEquals('logo.jpg', image.Title())
 
+    def test_receive_fails_when_other_object_exists_at_path(self):
+        # Create image at same path but with different UID
+        create(Builder('image').titled('bar.jpg'))
+        self.receive('image.json', expected_result='UnexpectedError')
+
+    def test_receiving_object_existing_at_different_path_moves_object(self):
+        image = create(Builder('image').titled('something.jpg'))
+        image._setUID('02ef694164310bca909d963f515e376d')
+        image.reindexObject()
+        self.assertEquals('/plone/something.jpg', '/'.join(image.getPhysicalPath()))
+        self.assertEquals('something.jpg', image.Title())
+        self.receive('image.json', expected_result='ObjectUpdatedState')
+        self.assertEquals('/plone/bar.jpg', '/'.join(image.getPhysicalPath()))
+        self.assertEquals('logo.jpg', image.Title())
+
     def receive(self, asset_filename, expected_result):
         self.request.set('jsondata', self.asset(asset_filename).text())
         response = self.portal.restrictedTraverse('publisher.receive')()
-        self.assertTrue(
-            response.startswith(expected_result),
-            'Unexpected receive result, expected: {}\n Got: {}'.format(
-                expected_result,
-                response))
+        self.assertEquals(expected_result, response.split()[0],
+                          'Unexpected result: {0}'.format(response))
