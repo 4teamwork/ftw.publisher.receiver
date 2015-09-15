@@ -19,3 +19,10 @@ class IntegrationTestCase(TestCase):
         filepath = Path(__file__).parent.joinpath('assets', filename)
         assert filepath.isfile(), 'Missing asset "{0}" at {1}'.format(filepath, filepath)
         return filepath
+
+    def receive(self, asset_filename, expected_result):
+        self.grant('Manager')
+        self.request.set('jsondata', self.asset(asset_filename).text())
+        response = self.portal.restrictedTraverse('publisher.receive')()
+        self.assertEquals(expected_result, response.split()[0],
+                          'Unexpected result: {0}'.format(response))

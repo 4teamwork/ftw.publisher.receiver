@@ -6,10 +6,6 @@ from plone.uuid.interfaces import IUUID
 
 class TestDecoder(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestDecoder, self).setUp()
-        self.grant('Manager')
-
     def test_receiving_image_push_creates_object(self):
         self.assertNotIn('bar.jpg', self.portal.objectIds(),
                          'Precondition: image should not yet exist.')
@@ -30,6 +26,7 @@ class TestDecoder(IntegrationTestCase):
         self.assertEquals('logo.jpg', image.Title())
 
     def test_receiving_image_move_moves_object(self):
+        self.grant('Manager')
         image = create(Builder('image').titled('bar.jpg'))
         image._setUID('02ef694164310bca909d963f515e376d')
         image.reindexObject()
@@ -39,11 +36,13 @@ class TestDecoder(IntegrationTestCase):
         self.assertEquals('logo.jpg', image.Title())
 
     def test_receive_fails_when_other_object_exists_at_path(self):
+        self.grant('Manager')
         # Create image at same path but with different UID
         create(Builder('image').titled('bar.jpg'))
         self.receive('image.json', expected_result='UnexpectedError')
 
     def test_receiving_object_existing_at_different_path_moves_object(self):
+        self.grant('Manager')
         image = create(Builder('image').titled('something.jpg'))
         image._setUID('02ef694164310bca909d963f515e376d')
         image.reindexObject()
@@ -52,9 +51,3 @@ class TestDecoder(IntegrationTestCase):
         self.receive('image.json', expected_result='ObjectUpdatedState')
         self.assertEquals('/plone/bar.jpg', '/'.join(image.getPhysicalPath()))
         self.assertEquals('logo.jpg', image.Title())
-
-    def receive(self, asset_filename, expected_result):
-        self.request.set('jsondata', self.asset(asset_filename).text())
-        response = self.portal.restrictedTraverse('publisher.receive')()
-        self.assertEquals(expected_result, response.split()[0],
-                          'Unexpected result: {0}'.format(response))
