@@ -7,6 +7,7 @@ tests_require = [
     'Products.PloneTestCase',
     'collective.testcaselayer',
     'ftw.builder',
+    'path.py',
     'plone.app.testing',
 ]
 

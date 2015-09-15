@@ -9,7 +9,6 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
                doctest.REPORT_NDIFF)
 
 INTEGRATION_TESTS = [
-    'decoder.txt',
     'receive.txt',
 ]
 
