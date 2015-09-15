@@ -2,29 +2,25 @@ from setuptools import setup, find_packages
 import os
 
 version = '2.0.5.dev0'
-maintainer = 'Jonas Baumann'
 
-tests_require=[
+tests_require = [
     'collective.testcaselayer',
     'Products.PloneTestCase',
-    ]
+]
 
 setup(name='ftw.publisher.receiver',
       version=version,
       description="Staging and publishing addon for Plone contents.",
-      long_description=open("README.rst").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
-
-      # Get more strings from
-      # http://www.python.org/pypi?%3Aaction=list_classifiers
+      long_description=open("README.rst").read() + "\n" +
+      open(os.path.join("docs", "HISTORY.txt")).read(),
 
       classifiers=[
-        'Framework :: Plone',
-        'Framework :: Plone :: 4.2',
-        'Framework :: Plone :: 4.3',
-        'Programming Language :: Python',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        ],
+          'Framework :: Plone',
+          'Framework :: Plone :: 4.2',
+          'Framework :: Plone :: 4.3',
+          'Programming Language :: Python',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+      ],
 
       keywords='ftw publisher receiver',
       author='4teamwork AG',
@@ -37,15 +33,15 @@ setup(name='ftw.publisher.receiver',
       zip_safe=False,
 
       install_requires=[
-        'setuptools',
-        'ftw.publisher.core',
-        'Plone',
-        ],
+          'setuptools',
+          'ftw.publisher.core',
+          'Plone',
+      ],
 
       extras_require={
-        'tests': tests_require,
-        'PloneFormGen': ['Products.PloneFormGen'],
-        },
+          'tests': tests_require,
+          'PloneFormGen': ['Products.PloneFormGen'],
+      },
 
       tests_require=tests_require,
 
@@ -53,5 +49,4 @@ setup(name='ftw.publisher.receiver',
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = plone
-      """,
-      )
+      """)

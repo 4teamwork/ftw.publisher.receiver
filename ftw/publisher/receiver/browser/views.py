@@ -44,7 +44,9 @@ class ReceiveObject(BrowserView):
                 # otherwise we encapsulate the exception in a UnexpectedError
                 exc = ''.join(traceback.format_exception(*sys.exc_info()))
                 state = states.UnexpectedError(exc)
+
             self.logger.error('request failed: %s' % (state.toString()))
+
         # get the string representation of the CommunicationState
         resp = communication.createResponse(state)
         try:
@@ -154,14 +156,14 @@ class ReceiveObject(BrowserView):
 
                     # if we can't fix it we will raise the followin exception
                     exception = states.UIDPathMismatchError({
-                            'problem': 'path wrong',
-                            'found path': current_path,
-                            'expected path': expected_path,
-                            })
+                        'problem': 'path wrong',
+                        'found path': current_path,
+                        'expected path': expected_path,
+                    })
 
                     # is it in the same place? -> rename
                     if current_path.split('/')[:-1] == \
-                            expected_path.split('/')[:-1]:
+                       expected_path.split('/')[:-1]:
                         putils = obj1.plone_utils
                         success, failure = putils.renameObjectsByPaths(
                             (current_path, ), (expected_path.split('/')[-1], ),
@@ -190,10 +192,10 @@ class ReceiveObject(BrowserView):
 
                 elif object.UID() != metadata['UID']:
                     raise states.UIDPathMismatchError({
-                            'problem': 'UID wrong',
-                            'found uid': object.UID(),
-                            'expected uid': metadata['UID'],
-                            })
+                        'problem': 'UID wrong',
+                        'found uid': object.UID(),
+                        'expected uid': metadata['UID'],
+                    })
 
         parent_modified_date = None
 
@@ -203,8 +205,8 @@ class ReceiveObject(BrowserView):
             self.logger.info(
                 'Object with UID %s does not existing: creating new object' % (
                     metadata['UID'],
-                    )
                 )
+            )
             # ... find container
             container = self._findContainerObjectByPath(absPath)
             try:
@@ -215,14 +217,14 @@ class ReceiveObject(BrowserView):
                 raise states.ErrorState('Could not find container of %s' %
                                         absPath)
             self.logger.info('... container: "%s" at %s' % (
-                    container.Title(),
-                    '/'.join(container.getPhysicalPath()),
-                    ))
+                container.Title(),
+                '/'.join(container.getPhysicalPath()),
+            ))
             # ... create object
             object = container.get(container.invokeFactory(
-                    metadata['portal_type'],
-                    metadata['id'],
-                    ))
+                metadata['portal_type'],
+                metadata['id'],
+            ))
 
             if hasattr(aq_base(object), '_setUID'):
                 object._setUID(metadata['UID'])
@@ -429,11 +431,11 @@ class ReceiveObject(BrowserView):
             return portalObject
         # for any other object we use the catalog tool
         brains = self.context.portal_catalog({
-                'path': {
-                    'query': absolutePath,
-                    'depth': 0,
-                    },
-                })
+            'path': {
+                'query': absolutePath,
+                'depth': 0,
+            },
+        })
         if len(brains) == 0:
             return None
         else:

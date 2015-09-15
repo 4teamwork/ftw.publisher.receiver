@@ -11,11 +11,11 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
 INTEGRATION_TESTS = [
     'decoder.txt',
     'receive.txt',
-    ]
+]
 
 def test_suite():
     return unittest.TestSuite([
-            # doctests in file bar.txt
+        # doctests in file bar.txt
             ztc.ZopeDocFileSuite(
                 filename,
                 test_class=ReceiverTestCase, optionflags=OPTIONFLAGS)
