@@ -16,6 +16,6 @@ class IntegrationTestCase(TestCase):
         setRoles(self.portal, TEST_USER_ID, list(roles))
 
     def asset(self, filename):
-        filepath = Path(__file__).parent.joinpath('jobs', filename)
+        filepath = Path(__file__).parent.joinpath('assets', filename)
         assert filepath.isfile(), 'Missing asset "{0}" at {1}'.format(filepath, filepath)
         return filepath
