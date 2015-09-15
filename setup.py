@@ -4,8 +4,6 @@ import os
 version = '2.0.5.dev0'
 
 tests_require = [
-    'Products.PloneTestCase',
-    'collective.testcaselayer',
     'ftw.builder',
     'path.py',
     'plone.app.testing',
