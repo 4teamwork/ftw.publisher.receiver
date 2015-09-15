@@ -1,18 +1,17 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:five="http://namespaces.zope.org/five"
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      i18n_domain="ftw.publisher.receiver">
-
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="ftw.publisher.receiver">
 
     <include package=".browser" />
 
     <!-- eventhander for Ploneformgen -->
     <subscriber
-          zcml:condition="installed Products.PloneFormGen"
-          for="Products.PloneFormGen.interfaces.IPloneFormGenForm
-               ftw.publisher.receiver.interfaces.IAfterCreatedEvent"
-          handler=".eventhandlers.delete_auto_generated_contents"
-          />
+        zcml:condition="installed Products.PloneFormGen"
+        for="Products.PloneFormGen.interfaces.IPloneFormGenForm
+             ftw.publisher.receiver.interfaces.IAfterCreatedEvent"
+        handler=".eventhandlers.delete_auto_generated_contents"
+        />
 
 </configure>
