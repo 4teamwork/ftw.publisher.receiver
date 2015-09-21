@@ -14,4 +14,12 @@
         handler=".eventhandlers.delete_auto_generated_contents"
         />
 
+    <!-- ftw.simplelayout -->
+    <configure zcml:condition="installed ftw.simplelayout">
+        <subscriber
+            for="ftw.simplelayout.interfaces.ISimplelayout
+                 ftw.publisher.receiver.interfaces.IAfterUpdatedEvent"
+            handler=".simplelayout.remove_deleted_blocks_after_update" />
+    </configure>
+
 </configure>

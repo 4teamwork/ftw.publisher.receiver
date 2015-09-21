@@ -1,8 +1,11 @@
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
+from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
+from plone.testing import z2
 from zope.configuration import xmlconfig
+import ftw.simplelayout.tests.builders
 
 
 class ReceiverLayer(PloneSandboxLayer):
@@ -16,6 +19,11 @@ class ReceiverLayer(PloneSandboxLayer):
             '  <includePluginsOverrides package="plone" />'
             '</configure>',
             context=configurationContext)
+
+        z2.installProduct(app, 'ftw.simplelayout')
+
+    def setUpPloneSite(self, portal):
+        applyProfile(portal, 'ftw.simplelayout.contenttypes:default')
 
 
 RECEIVER_FIXTURE = ReceiverLayer()
