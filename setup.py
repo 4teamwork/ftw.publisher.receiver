@@ -4,8 +4,10 @@ import os
 version = '2.0.5.dev0'
 
 tests_require = [
-    'collective.testcaselayer',
-    'Products.PloneTestCase',
+    'ftw.builder',
+    'ftw.testing',
+    'path.py',
+    'plone.app.testing',
 ]
 
 setup(name='ftw.publisher.receiver',
