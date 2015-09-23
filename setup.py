@@ -5,6 +5,7 @@ version = '2.0.5.dev0'
 
 tests_require = [
     'ftw.builder',
+    'ftw.simplelayout [contenttypes]',
     'ftw.testing',
     'path.py',
     'plone.app.testing',
@@ -18,7 +19,6 @@ setup(name='ftw.publisher.receiver',
 
       classifiers=[
           'Framework :: Plone',
-          'Framework :: Plone :: 4.2',
           'Framework :: Plone :: 4.3',
           'Programming Language :: Python',
           'Topic :: Software Development :: Libraries :: Python Modules',

@@ -5,7 +5,12 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop Plone 4.2 support.
+  [jone]
+
+- ftw.simplelayout integration:
+  Remove deleted blocks when updating simplelayout page.
+  [jone]
 
 
 2.0.4 (2015-03-19)
