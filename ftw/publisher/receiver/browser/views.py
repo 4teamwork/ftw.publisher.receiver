@@ -495,6 +495,11 @@ class ReceiveObject(BrowserView):
         positions = metadata['sibling_positions']
         parent = object.aq_inner.aq_parent
         object_ids = list(parent.objectIds())
+        obj_id = object.getId()
+
+        # Do nothing if the position is the same.
+        if positions[obj_id] == parent.getObjectPosition(obj_id):
+            return
 
         # move objects with no position info to the bottom
         for id in object_ids:
