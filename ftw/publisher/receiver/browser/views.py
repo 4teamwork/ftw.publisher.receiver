@@ -288,13 +288,15 @@ class ReceiveObject(BrowserView):
             object.setModificationDate(modifiedDate)
             if not is_root:
                 catalog_tool.catalog_object(object,
-                                            '/'.join(object.getPhysicalPath()))
+                                            '/'.join(object.getPhysicalPath()),
+                                            idxs=['modified'])
 
         if parent_modified_date:
             parent = object.aq_inner.aq_parent
             parent.setModificationDate(parent_modified_date)
             catalog_tool.catalog_object(object,
-                                        '/'.join(object.getPhysicalPath()))
+                                        '/'.join(object.getPhysicalPath()),
+                                        idxs=['modified'])
 
         # return the appropriate CommunicationState - notify events
         if new_object:
@@ -491,9 +493,15 @@ class ReceiveObject(BrowserView):
         @type metadata:         dict
         @return:                None
         """
+
         positions = metadata['sibling_positions']
         parent = object.aq_inner.aq_parent
         object_ids = list(parent.objectIds())
+        obj_id = object.getId()
+
+        # Do nothing if the position is the same.
+        if positions[obj_id] == parent.getObjectPosition(obj_id):
+            return
 
         # move objects with no position info to the bottom
         for id in object_ids:
@@ -505,14 +513,6 @@ class ReceiveObject(BrowserView):
 
         # order objects
         parent.moveObjectsByDelta(object_ids, -len(object_ids))
-
-        # reindex all objects
-        for id in object_ids:
-            try:
-                parent.get(id).reindexObject(
-                    idxs=['positionInParent', 'getObjPositionInParent'])
-            except:
-                pass
 
 
 class TestConnection(BrowserView):

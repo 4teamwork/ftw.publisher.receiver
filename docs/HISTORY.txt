@@ -5,7 +5,15 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Only reindex the "modified" index after setting a new modification date.
+  [mathias.leimgruber]
+
+- Do not reorder if the position of the obj did not change.
+  [mathias.leimgruber]
+
+- No longer reindex getObjPositionInParent index after reordering.
+  The position implementation has changes.
+  [mathias.leimgruber]
 
 
 2.1.0 (2015-09-30)
