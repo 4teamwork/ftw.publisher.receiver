@@ -491,6 +491,7 @@ class ReceiveObject(BrowserView):
         @type metadata:         dict
         @return:                None
         """
+
         positions = metadata['sibling_positions']
         parent = object.aq_inner.aq_parent
         object_ids = list(parent.objectIds())
@@ -505,14 +506,6 @@ class ReceiveObject(BrowserView):
 
         # order objects
         parent.moveObjectsByDelta(object_ids, -len(object_ids))
-
-        # reindex all objects
-        for id in object_ids:
-            try:
-                parent.get(id).reindexObject(
-                    idxs=['positionInParent', 'getObjPositionInParent'])
-            except:
-                pass
 
 
 class TestConnection(BrowserView):

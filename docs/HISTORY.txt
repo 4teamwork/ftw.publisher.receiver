@@ -5,7 +5,9 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- No longer reindex getObjPositionInParent index after reordering.
+  The position implementation has changes.
+  [mathias.leimgruber]
 
 
 2.1.0 (2015-09-30)
