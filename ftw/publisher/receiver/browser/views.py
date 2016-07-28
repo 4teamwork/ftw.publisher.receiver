@@ -288,13 +288,15 @@ class ReceiveObject(BrowserView):
             object.setModificationDate(modifiedDate)
             if not is_root:
                 catalog_tool.catalog_object(object,
-                                            '/'.join(object.getPhysicalPath()))
+                                            '/'.join(object.getPhysicalPath()),
+                                            idxs=['modified'])
 
         if parent_modified_date:
             parent = object.aq_inner.aq_parent
             parent.setModificationDate(parent_modified_date)
             catalog_tool.catalog_object(object,
-                                        '/'.join(object.getPhysicalPath()))
+                                        '/'.join(object.getPhysicalPath()),
+                                        idxs=['modified'])
 
         # return the appropriate CommunicationState - notify events
         if new_object:
