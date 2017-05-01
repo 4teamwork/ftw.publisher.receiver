@@ -18,6 +18,7 @@ import os.path
 import sys
 import traceback
 import plone.uuid
+from Products.CMFCore.utils import getToolByName
 
 
 class ReceiveObject(BrowserView):
@@ -533,3 +534,19 @@ class TestConnection(BrowserView):
             return 'ok'
         else:
             return 'Not a Plone-Site'
+
+
+class GetSavedData(BrowserView):
+
+    def __call__(self, *args, **kwargs):
+        download_format = self.request.get('download_format')
+        target_uid = self.request.get('uid')
+        cat = getToolByName(self.context, 'portal_catalog')
+        result = cat(UID=target_uid)
+        if len(result) != 1:
+            return ''
+        obj = result[0].getObject()
+        if download_format == 'csv':
+            return obj.download_csv(self.request, self.request.RESPONSE)
+        else:
+            return obj.download_tsv(self.request, self.request.RESPONSE)
