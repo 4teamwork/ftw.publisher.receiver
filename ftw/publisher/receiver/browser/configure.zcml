@@ -18,4 +18,10 @@
         permission="cmf.ReviewPortalContent"
         />
 
+    <browser:page
+        name="formgen_get_saved_data"
+        for="*"
+        class=".views.GetSavedData"
+        permission="cmf.ReviewPortalContent"
+        />
 </configure>

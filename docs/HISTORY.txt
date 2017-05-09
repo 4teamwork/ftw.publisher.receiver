@@ -5,7 +5,8 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add new Endpoint which allows the data of a Form Folder to be pulled from the published Site.
+  [tschanzt]
 
 
 2.2.0 (2016-08-08)

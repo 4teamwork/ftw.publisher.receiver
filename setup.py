@@ -8,6 +8,7 @@ tests_require = [
     'ftw.testing',
     'path.py',
     'plone.app.testing',
+    'Products.PloneFormGen < 1.8.0a',
 ]
 
 setup(name='ftw.publisher.receiver',
