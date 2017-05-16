@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2.1 (unreleased)
+2.2.1 (2017-05-16)
 ------------------
 
 - Add new Endpoint which allows the data of a Form Folder to be pulled from the published Site.
