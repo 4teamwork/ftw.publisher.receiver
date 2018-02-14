@@ -27,7 +27,7 @@ class TestDecoder(IntegrationTestCase):
 
     def test_receiving_image_move_moves_object(self):
         self.grant('Manager')
-        image = create(Builder('image').titled('bar.jpg'))
+        image = create(Builder('image').titled(u'bar.jpg'))
         image._setUID('02ef694164310bca909d963f515e376d')
         image.reindexObject()
         self.assertEquals('/plone/bar.jpg', '/'.join(image.getPhysicalPath()))
@@ -38,12 +38,12 @@ class TestDecoder(IntegrationTestCase):
     def test_receive_fails_when_other_object_exists_at_path(self):
         self.grant('Manager')
         # Create image at same path but with different UID
-        create(Builder('image').titled('bar.jpg'))
+        create(Builder('image').titled(u'bar.jpg'))
         self.receive('image.json', expected_result='UnexpectedError')
 
     def test_receiving_object_existing_at_different_path_moves_object(self):
         self.grant('Manager')
-        image = create(Builder('image').titled('something.jpg'))
+        image = create(Builder('image').titled(u'something.jpg'))
         image._setUID('02ef694164310bca909d963f515e376d')
         image.reindexObject()
         self.assertEquals('/plone/something.jpg', '/'.join(image.getPhysicalPath()))

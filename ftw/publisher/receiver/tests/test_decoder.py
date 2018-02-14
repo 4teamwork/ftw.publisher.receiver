@@ -56,7 +56,7 @@ class TestDecoder(IntegrationTestCase):
     def test_load_schema_from_object(self):
         self.decoder(self.asset('basic_folder.json').text())
         self.grant('Manager')
-        folder = create(Builder('folder').titled('Foo'))
+        folder = create(Builder('folder').titled(u'Foo'))
         folder._setUID(self.decoder.data['metadata']['UID'])
 
         schema = self.decoder.getSchema(folder)
@@ -65,7 +65,7 @@ class TestDecoder(IntegrationTestCase):
     def test_unserialize_fields(self):
         self.decoder(self.asset('basic_folder.json').text())
         self.grant('Manager')
-        folder = create(Builder('folder').titled('Foo'))
+        folder = create(Builder('folder').titled(u'Foo'))
         folder._setUID(self.decoder.data['metadata']['UID'])
 
         field_data = self.decoder.unserializeFields(
