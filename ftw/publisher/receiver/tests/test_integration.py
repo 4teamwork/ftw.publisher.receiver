@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.tests import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
 
@@ -28,7 +29,7 @@ class TestDecoder(IntegrationTestCase):
     def test_receiving_image_move_moves_object(self):
         self.grant('Manager')
         image = create(Builder('image').titled(u'bar.jpg'))
-        image._setUID('02ef694164310bca909d963f515e376d')
+        helpers.set_uid(image, '02ef694164310bca909d963f515e376d')
         image.reindexObject()
         self.assertEquals('/plone/bar.jpg', '/'.join(image.getPhysicalPath()))
         self.receive('move_image.json', expected_result='ObjectMovedState')
@@ -44,7 +45,7 @@ class TestDecoder(IntegrationTestCase):
     def test_receiving_object_existing_at_different_path_moves_object(self):
         self.grant('Manager')
         image = create(Builder('image').titled(u'something.jpg'))
-        image._setUID('02ef694164310bca909d963f515e376d')
+        helpers.set_uid(image, '02ef694164310bca909d963f515e376d')
         image.reindexObject()
         self.assertEquals('/plone/something.jpg', '/'.join(image.getPhysicalPath()))
         self.assertEquals('something.jpg', image.Title())

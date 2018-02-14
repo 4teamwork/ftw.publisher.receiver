@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.publisher.core.states import DecodeError
 from ftw.publisher.core.states import PartialError
+from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.decoder import Decoder
 from ftw.publisher.receiver.tests import IntegrationTestCase
 
@@ -57,7 +58,7 @@ class TestDecoder(IntegrationTestCase):
         self.decoder(self.asset('basic_folder.json').text())
         self.grant('Manager')
         folder = create(Builder('folder').titled(u'Foo'))
-        folder._setUID(self.decoder.data['metadata']['UID'])
+        helpers.set_uid(folder, self.decoder.data['metadata']['UID'])
 
         schema = self.decoder.getSchema(folder)
         self.assertTrue(schema)
@@ -66,7 +67,7 @@ class TestDecoder(IntegrationTestCase):
         self.decoder(self.asset('basic_folder.json').text())
         self.grant('Manager')
         folder = create(Builder('folder').titled(u'Foo'))
-        folder._setUID(self.decoder.data['metadata']['UID'])
+        helpers.set_uid(folder, self.decoder.data['metadata']['UID'])
 
         field_data = self.decoder.unserializeFields(
             folder, u'field_data_adapter')[u'field_data_adapter']
