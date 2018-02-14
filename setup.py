@@ -7,6 +7,7 @@ tests_require = [
     'ftw.builder',
     'ftw.testing',
     'path.py',
+    'plone.app.contenttypes',
     'plone.app.testing',
     'Products.PloneFormGen',
 ]
