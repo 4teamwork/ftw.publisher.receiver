@@ -6,6 +6,7 @@ from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.decoder import Decoder
 from ftw.publisher.receiver.helpers import IS_PLONE_4
 from ftw.publisher.receiver.tests import IntegrationTestCase
+from ftw.testing import IS_PLONE_5
 
 
 class TestDecoder(IntegrationTestCase):
@@ -66,8 +67,26 @@ class TestDecoder(IntegrationTestCase):
         field_data = self.decoder.unserializeFields(
             folder, data_adapter_name)[data_adapter_name]
 
-        self.assertDictContainsSubset(
-            {
+        if IS_PLONE_5:
+            expected = {
+                'IAllowDiscussion': {'allow_discussion': None},
+                'IDublinCore': {'contributors': (),
+                             'creators': (u'test_user_1_',),
+                             'description': u'',
+                             'effective': None,
+                             'expires': None,
+                             'language': 'en',
+                             'rights': None,
+                             'subjects': (),
+                             'title': u'A folder'},
+                'IExcludeFromNavigation': {'exclude_from_nav': None},
+                'INextPreviousToggle': {'nextPreviousEnabled': False},
+                'IRelatedItems': {'relatedItems': ['raw', None]},
+                'IShortName': {'id': 'a-folder'},
+                'plone_0_Folder': {}
+            }
+        else:
+            expected = {
                 'allowDiscussion': False,
                 'contributors': [],
                 'creation_date': '2011/03/23 14:26:54.592 GMT+1',
@@ -85,5 +104,6 @@ class TestDecoder(IntegrationTestCase):
                 'rights': '',
                 'subject': [],
                 'title': 'Foo',
-            },
-            field_data)
+            }
+
+        self.assertDictContainsSubset(expected, field_data)
