@@ -4,6 +4,7 @@ from ftw.publisher.core.states import DecodeError
 from ftw.publisher.core.states import PartialError
 from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.decoder import Decoder
+from ftw.publisher.receiver.helpers import IS_PLONE_4
 from ftw.publisher.receiver.tests import IntegrationTestCase
 
 
@@ -55,13 +56,15 @@ class TestDecoder(IntegrationTestCase):
                           str(cm.exception))
 
     def test_unserialize_fields(self):
-        self.decoder(self.asset('basic_folder.json').text())
+        asset_name = 'basic_folder.json' if IS_PLONE_4 else 'basic_folder_dx.json'
+        self.decoder(self.asset(asset_name).text())
         self.grant('Manager')
         folder = create(Builder('folder').titled(u'Foo'))
         helpers.set_uid(folder, self.decoder.data['metadata']['UID'])
 
+        data_adapter_name = u'field_data_adapter' if IS_PLONE_4 else u'dx_field_data_adapter'
         field_data = self.decoder.unserializeFields(
-            folder, u'field_data_adapter')[u'field_data_adapter']
+            folder, data_adapter_name)[data_adapter_name]
 
         self.assertDictContainsSubset(
             {

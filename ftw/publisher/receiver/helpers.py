@@ -1,7 +1,11 @@
 from Acquisition import aq_base
+from Products.CMFPlone.utils import getFSVersionTuple
 from zope.event import notify
 from zope.lifecycleevent import ObjectAddedEvent
 import plone.uuid
+
+
+IS_PLONE_4 = (4,) <= getFSVersionTuple() < (5,)
 
 
 def set_uid(obj, uid):
