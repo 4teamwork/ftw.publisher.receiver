@@ -54,15 +54,6 @@ class TestDecoder(IntegrationTestCase):
         self.assertEquals('Missing "metadata.portal_type"',
                           str(cm.exception))
 
-    def test_load_schema_from_object(self):
-        self.decoder(self.asset('basic_folder.json').text())
-        self.grant('Manager')
-        folder = create(Builder('folder').titled(u'Foo'))
-        helpers.set_uid(folder, self.decoder.data['metadata']['UID'])
-
-        schema = self.decoder.getSchema(folder)
-        self.assertTrue(schema)
-
     def test_unserialize_fields(self):
         self.decoder(self.asset('basic_folder.json').text())
         self.grant('Manager')
@@ -93,11 +84,3 @@ class TestDecoder(IntegrationTestCase):
                 'title': 'Foo',
             },
             field_data)
-
-    def test_site_root_schema_is_None(self):
-        # The site root hase no schema.
-        # Therefore getting the schema schould return None
-        # and should not crash.
-
-        self.decoder(self.asset('plonesite.json').text())
-        self.assertEquals(None, self.decoder.getSchema(self.portal))

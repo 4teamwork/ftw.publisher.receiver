@@ -48,5 +48,4 @@
                    "utf8:physicalPath": "utf8:/Members/test_user_1_/foo",
                    "utf8:portal_type": "utf8:Folder",
                    "utf8:review_state": "utf8:private",
-                   "utf8:schema_path": "utf8:Products.ATContentTypes.content.folder.ATFolder.schema",
                    "utf8:sibling_positions": {"utf8:foo": 0}}}
