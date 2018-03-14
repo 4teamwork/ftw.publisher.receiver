@@ -30,6 +30,5 @@
                    "utf8:physicalPath": "utf8:/bar.jpg",
                    "utf8:portal_type": "utf8:Image",
                    "utf8:review_state": "utf8:",
-                   "utf8:schema_path": "utf8:Products.ATContentTypes.content.image.ATImage.schema",
                    "utf8:sibling_positions": {"utf8:bar.jpg": 1,
                                               "utf8:foo": 0}}}

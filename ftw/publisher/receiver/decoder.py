@@ -98,26 +98,6 @@ class Decoder(object):
                         raise states.PartialError(
                             'Missing "%s.%s"' % (key, subkey))
 
-    security.declarePrivate('getSchema')
-    def getSchema(self, object):
-        """
-        Returns the Schema of the portal_type defined in the metadata.
-        @return:        Archetypes Schema object
-        @rtype:         Schema
-        """
-        if not IPloneSiteRoot.providedBy(object):
-            schema_path = self.data['metadata']['schema_path']
-            path_parts = schema_path.split('.')
-            module_path = '.'.join(path_parts[:-2])
-            class_name = path_parts[-2]
-            var_name = path_parts[-1]
-            klass = getattr(__import__(module_path, globals(),
-                                       locals(), class_name), class_name)
-            schema = getattr(klass, var_name)
-            return schema
-        else:
-            return None
-
     security.declarePrivate('unserializeFields')
     def unserializeFields(self, object, jsonkey):
         """

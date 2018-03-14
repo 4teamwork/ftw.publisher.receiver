@@ -7,9 +7,16 @@ tests_require = [
     'ftw.builder',
     'ftw.testing',
     'path.py',
+    'plone.api',
+    'plone.app.contenttypes',
     'plone.app.testing',
-    'Products.PloneFormGen < 1.8.0a',
+    'Products.PloneFormGen',
 ]
+
+tests_plone4_require = [
+    'Products.PloneFormGen < 1.8.0a',  # Plone 4 Version
+]
+
 
 setup(name='ftw.publisher.receiver',
       version=version,
@@ -20,6 +27,7 @@ setup(name='ftw.publisher.receiver',
       classifiers=[
           'Framework :: Plone',
           'Framework :: Plone :: 4.3',
+          'Framework :: Plone :: 5.1',
           'Programming Language :: Python',
           'Topic :: Software Development :: Libraries :: Python Modules',
       ],
@@ -42,6 +50,7 @@ setup(name='ftw.publisher.receiver',
 
       extras_require={
           'tests': tests_require,
+          'tests_plone4': tests_plone4_require,
           'PloneFormGen': ['Products.PloneFormGen'],
       },
 

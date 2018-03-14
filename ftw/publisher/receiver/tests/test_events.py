@@ -1,3 +1,4 @@
+from ftw.publisher.receiver.helpers import IS_PLONE_4
 from ftw.publisher.receiver.interfaces import IAfterCreatedEvent
 from ftw.publisher.receiver.interfaces import IAfterUpdatedEvent
 from ftw.publisher.receiver.tests import IntegrationTestCase
@@ -23,13 +24,15 @@ class TestEvents(IntegrationTestCase):
 
     def test_create_event_fired(self):
         created_subscriber = RecordingSubscriber.for_event(IAfterCreatedEvent)
-        self.receive('image.json', expected_result='ObjectCreatedState')
+        asset_name = 'image.json' if IS_PLONE_4 else 'image_dx.json'
+        self.receive(asset_name, expected_result='ObjectCreatedState')
         event, = created_subscriber.calls
         self.assertEquals(self.portal['bar.jpg'], event.obj)
 
     def test_update_event_fired(self):
         updated_subscriber = RecordingSubscriber.for_event(IAfterUpdatedEvent)
-        self.receive('image.json', expected_result='ObjectCreatedState')
-        self.receive('image.json', expected_result='ObjectUpdatedState')
+        asset_name = 'image.json' if IS_PLONE_4 else 'image_dx.json'
+        self.receive(asset_name, expected_result='ObjectCreatedState')
+        self.receive(asset_name, expected_result='ObjectUpdatedState')
         event, = updated_subscriber.calls
         self.assertEquals(self.portal['bar.jpg'], event.obj)

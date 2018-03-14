@@ -7,17 +7,15 @@ from ftw.publisher.core import states, communication
 from ftw.publisher.core.interfaces import IDataCollector
 from ftw.publisher.receiver import decoder
 from ftw.publisher.receiver import getLogger
+from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
 from plone.app.uuid.utils import uuidToObject
 from zope import event
 from zope.component import getAdapters
-from zope.event import notify
-from zope.lifecycleevent import ObjectAddedEvent
 from zope.publisher.interfaces import Retry
 import os.path
 import sys
 import traceback
-import plone.uuid
 from Products.CMFCore.utils import getToolByName
 
 
@@ -227,15 +225,7 @@ class ReceiveObject(BrowserView):
                 metadata['id'],
             ))
 
-            if hasattr(aq_base(object), '_setUID'):
-                object._setUID(metadata['UID'])
-
-            else:
-                setattr(object,
-                        plone.uuid.interfaces.ATTRIBUTE_NAME,
-                        metadata['UID'])
-
-                notify(ObjectAddedEvent(object))
+            helpers.set_uid(object, metadata['UID'])
 
             # object.processForm()
             new_object = True

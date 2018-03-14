@@ -1,4 +1,5 @@
 from ftw.builder.testing import BUILDER_LAYER
+from ftw.testing import IS_PLONE_5
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
@@ -24,6 +25,8 @@ class ReceiverLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'Products.PloneFormGen:default')
+        if IS_PLONE_5:
+            applyProfile(portal, 'plone.app.contenttypes:default')
 
 RECEIVER_FIXTURE = ReceiverLayer()
 RECEIVER_INTEGRATION = IntegrationTesting(

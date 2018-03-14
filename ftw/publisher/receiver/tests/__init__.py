@@ -1,4 +1,6 @@
+from ftw.testing import IS_PLONE_5
 from ftw.publisher.receiver.testing import RECEIVER_INTEGRATION
+from ftw.publisher.receiver.tests import helpers
 from path import Path
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -11,6 +13,9 @@ class IntegrationTestCase(TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
+
+        if IS_PLONE_5:
+            helpers.add_behaviors('Image', 'plone.app.content.interfaces.INameFromTitle')
 
     def grant(self, *roles):
         setRoles(self.portal, TEST_USER_ID, list(roles))
