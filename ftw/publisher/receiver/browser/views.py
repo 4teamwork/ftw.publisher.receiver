@@ -1,5 +1,6 @@
 from Acquisition import aq_base
 from DateTime import DateTime
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Five import BrowserView
 from ZODB.POSException import ConflictError
@@ -10,13 +11,14 @@ from ftw.publisher.receiver import getLogger
 from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
 from plone.app.uuid.utils import uuidToObject
+from plone.protect.interfaces import IDisableCSRFProtection
 from zope import event
 from zope.component import getAdapters
+from zope.interface import alsoProvides
 from zope.publisher.interfaces import Retry
 import os.path
 import sys
 import traceback
-from Products.CMFCore.utils import getToolByName
 
 
 class ReceiveObject(BrowserView):
@@ -26,11 +28,13 @@ class ReceiveObject(BrowserView):
     and runs the specified action.
     """
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, REQUEST=None, *args, **kwargs):
         """
         @return:    response string containing a representation  of a
         CommunicationState as string.
         """
+        alsoProvides(REQUEST, IDisableCSRFProtection)
+
         # get a logger instance
         self.logger = getLogger()
         try:
