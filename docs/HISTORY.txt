@@ -6,6 +6,7 @@ Changelog
 ------------------
 
 - Fix publishing to receiver on plone 5 [Nachtalb]
+- Fix request issue. [busykoala]
 
 
 2.3.0 (2019-09-05)
