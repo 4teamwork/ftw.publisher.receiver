@@ -28,12 +28,12 @@ class ReceiveObject(BrowserView):
     and runs the specified action.
     """
 
-    def __call__(self, REQUEST=None, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
         """
         @return:    response string containing a representation  of a
         CommunicationState as string.
         """
-        alsoProvides(REQUEST, IDisableCSRFProtection)
+        alsoProvides(self.request, IDisableCSRFProtection)
 
         # get a logger instance
         self.logger = getLogger()
