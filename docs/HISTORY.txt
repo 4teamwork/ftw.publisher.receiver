@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3.1 (unreleased)
+2.3.1 (2019-11-11)
 ------------------
 
 - Fix publishing to receiver on plone 5 [Nachtalb]
