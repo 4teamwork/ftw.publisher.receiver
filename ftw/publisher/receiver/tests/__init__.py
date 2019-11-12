@@ -4,7 +4,7 @@ from ftw.publisher.receiver.tests import helpers
 from path import Path
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class IntegrationTestCase(TestCase):
