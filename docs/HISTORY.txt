@@ -5,7 +5,7 @@ Changelog
 2.3.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix tests after constrained types adapter added to core. [djowett-ftw]
 
 
 2.3.2 (2019-11-27)
