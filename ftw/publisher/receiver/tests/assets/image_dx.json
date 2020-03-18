@@ -11,6 +11,7 @@
     }
  },
  "unicode:backreferences_adapter": {},
+ "unicode:constrain_types_adapter": {},
  "unicode:interface_data_adapter": [],
  "unicode:portlet_data_adapter": {},
  "unicode:properties_data_adapter": [{"utf8:id": "utf8:title",
