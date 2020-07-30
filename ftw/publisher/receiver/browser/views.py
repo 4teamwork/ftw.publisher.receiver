@@ -11,7 +11,6 @@ from ftw.publisher.receiver import getLogger
 from ftw.publisher.receiver import helpers
 from ftw.publisher.receiver.events import AfterCreatedEvent, AfterUpdatedEvent
 from plone.app.uuid.utils import uuidToObject
-from plone.protect.interfaces import IDisableCSRFProtection
 from zope import event
 from zope.component import getAdapters
 from zope.interface import alsoProvides
@@ -19,6 +18,11 @@ from zope.publisher.interfaces import Retry
 import os.path
 import sys
 import traceback
+
+try:
+    from plone.protect.interfaces import IDisableCSRFProtection
+except ImportError:
+    IDisableCSRFProtection = None
 
 
 class ReceiveObject(BrowserView):
@@ -33,7 +37,8 @@ class ReceiveObject(BrowserView):
         @return:    response string containing a representation  of a
         CommunicationState as string.
         """
-        alsoProvides(self.request, IDisableCSRFProtection)
+        if IDisableCSRFProtection:
+            alsoProvides(self.request, IDisableCSRFProtection)
 
         # get a logger instance
         self.logger = getLogger()
